@@ -9,27 +9,19 @@ import java.util.stream.Collectors;
 public class Data {
     private ArrayList<User> users;
     private ArrayList<Admin> admins;
-    private HashMap<String, HashSet<URL>> reverseIndex;
+    private ArrayList<Election> elections;
+
     private HashMap<String, String> sessionFiles;
-    private Queue<URL> toIndex;
-    private HashSet<URL> indexedUrls;
     private static String DEFAULT_USERS_FILE = "files/usersObjFile";
     private static String DEFAULT_ADMINS_FILE = "files/adminsObjFile";
-    private static String DEFAULT_REVERSED_INDEX_FILE = "files/reversedIndexObjFile";
-    private HashMap<URL,ArrayList<String>> toSync;
-    private ArrayList<String> topTenSearches;
-    private ArrayList<URL> topTenPages;
+    private static String DEFAULT_ELECTIONS_FILE = "files/electionsObjFile";
+
 
     public Data(){
         this.users = new ArrayList<>();
         this.admins = new ArrayList<>();
+        this.elections = new ArrayList<>();
         this.sessionFiles = new HashMap<>();
-        this.reverseIndex = new HashMap<>();
-        this.toIndex = new LinkedList<>();
-        this.toSync = new HashMap<>();
-        this.topTenSearches =new ArrayList<>();
-        this.topTenPages = new ArrayList<>();
-
     }
 
     private void exitProgram(){ System.exit(1); }
@@ -42,33 +34,21 @@ public class Data {
         this.admins.add(admin);
     }
 
-    public void addToReversedIndexes(URL newUrl, ArrayList<String> words){
-        for (String word: words){
-            if (this.reverseIndex.get(word) == null){
-                this.reverseIndex.put(word, new HashSet<>());
-            }
-            this.reverseIndex.get(word).add(newUrl);
-        }
-        this.reverseIndex.remove("");
-        updateRecords();
+    public void add(Election election){
+        this.elections.add(election);
     }
 
     public synchronized void loadData(){
         readFile(DEFAULT_USERS_FILE, 1);
         readFile(DEFAULT_ADMINS_FILE, 2);
-        readFile(DEFAULT_REVERSED_INDEX_FILE, 3);
+        readFile(DEFAULT_ELECTIONS_FILE, 3);
         logoutEveryone();
-        innerGetIndexedUrls();
         fillQueue();
-        updateAllLinksToThis();
-        getTopSearches();
-        getTopPages();
+
         this.sessionFiles.put("users", DEFAULT_USERS_FILE);
         this.sessionFiles.put("admins", DEFAULT_ADMINS_FILE);
-        this.sessionFiles.put("reverseIndex", DEFAULT_REVERSED_INDEX_FILE);
-        //System.out.println("LOADED Users: "+this.users + " AND Admins: "+ this.admins); // DEBUG
-        //System.out.println("LOADED Reverse Index("+this.reverseIndex.size()+")"); // DEBUG
-        //System.out.println("QUEUE of URLS("+ this.toIndex.size() + ")"); //DEBUG
+        this.sessionFiles.put("elections", DEFAULT_ELECTIONS_FILE);
+
     }
 
     private void logoutEveryone() {
@@ -78,15 +58,15 @@ public class Data {
             admin.forceSetLoggedIn(false);
     }
 
-    public synchronized void loadData(String userFileName, String adminFileName, String reverseIndexFileName){
-        readFile(reverseIndexFileName, 3);
+    public synchronized void loadData(String userFileName, String adminFileName, String electionFileName){
+        readFile(electionFileName, 3);
         readFile(adminFileName, 2);
         readFile(userFileName, 1);
         logoutEveryone();
         this.sessionFiles.put("users", userFileName);
         this.sessionFiles.put("admins", adminFileName);
-        this.sessionFiles.put("reverseIndex", reverseIndexFileName);
-    }
+        this.sessionFiles.put("elections", electionFileName);
+    p}
 
     public ArrayList<User> getUsers() {
         return users;
@@ -108,59 +88,11 @@ public class Data {
         return admins;
     }
 
-    public HashMap<String, HashSet<URL>> getReverseIndex(){
-        return this.reverseIndex;
+    public ArrayList<Election> getElections() {
+        return elections;
     }
 
-    public String getUrlToIndex(){
-        return this.toIndex.remove().getUrlName();
-    }
 
-    private void updateAllLinksToThis(){
-        for (URL currentUrl: this.indexedUrls){
-            for(URL other : this.indexedUrls){
-                if (!other.getUrlName().equals(currentUrl.getUrlName()))
-                    if (other.getLinksNamesFromThis().contains(currentUrl.getUrlName()))
-                        currentUrl.addLinkToThis(other);
-            }
-        }
-    }
-
-    public List<URL> getIndexEntry(String word){
-        try {
-            return orderByImportance(this.reverseIndex.get(word));
-        }
-        catch (Exception e){
-            return null;
-        }
-    }
-
-    public List<URL> orderByImportance(HashSet<URL> urls) {
-        List<URL> toSort = new ArrayList<>(urls);
-        toSort.sort(Collections.reverseOrder());
-        return toSort;
-    }
-
-    public HashSet<String> getUrlsNames(){
-        HashSet<String> urlsSet = new HashSet<>();
-
-        for(String index: this.reverseIndex.keySet()) {
-            for (URL url : this.reverseIndex.get(index)){
-                urlsSet.add(url.getUrlName());
-            }
-        }
-        return urlsSet;
-    }
-
-    private void innerGetIndexedUrls(){
-        this.indexedUrls = new HashSet<>();
-
-        for(String index: this.reverseIndex.keySet()) {
-            for (URL url : this.reverseIndex.get(index)){
-                this.indexedUrls.add(url);
-            }
-        }
-    }
 
     private void fillQueue(){
         HashSet<URL> uniqueUrls = new HashSet<>();
@@ -209,20 +141,16 @@ public class Data {
     public void clearDataToSync(){
         this.toSync = new HashMap<>();
     }
-
-    public synchronized void updateToIndexQueue(URL newUrl){
-        HashSet<URL> uniqueLinks = new HashSet<>(newUrl.getLinksFromThis());
-        this.toIndex.addAll(uniqueLinks);
-    }
+   
 
     public synchronized void updateRecords(){
         writeFile(this.sessionFiles.get("users"), 1);
         writeFile(this.sessionFiles.get("admins"), 2);
-        writeFile(this.sessionFiles.get("reverseIndex"), 3);
+        writeFile(this.sessionFiles.get("elections"), 3);
     }
 
-    public void createFiles(String userFileName, String adminFileName, String reverseIndexFileName){
-        writeFile(reverseIndexFileName, 3);
+    public void createFiles(String userFileName, String adminFileName, String electionFileName){
+        writeFile(electionFileName, 3);
         writeFile(userFileName, 1);
         writeFile(adminFileName, 2);
     }
@@ -230,7 +158,7 @@ public class Data {
     public void createFiles(){
         writeFile(DEFAULT_USERS_FILE, 1);
         writeFile(DEFAULT_ADMINS_FILE, 2);
-        writeFile(DEFAULT_REVERSED_INDEX_FILE, 3);
+        writeFile(DEFAULT_ELECTIONS_FILE, 3);
     }
 
     private synchronized void readFile(String filename, int variableFlag){
@@ -245,9 +173,7 @@ public class Data {
                 case 2:
                     this.admins = (ArrayList<Admin>) objStream.readObject();
                     break;
-                case 3:
-                    this.reverseIndex = (HashMap<String, HashSet<URL>>) objStream.readObject();
-                    break;
+                
             }
 
             objStream.close();
@@ -276,10 +202,7 @@ public class Data {
                 case 2:
                     objStream.writeObject(this.admins);
                     break;
-                case 3:
-                    this.reverseIndex.remove("");
-                    objStream.writeObject(this.reverseIndex);
-                    break;
+                
             }
             objStream.flush();
             objStream.close();
@@ -290,49 +213,8 @@ public class Data {
         }
     }
 
-    public URL getUrl(String queryUrl) {
-        URL tempURL = new URL(queryUrl);
-        for (URL url: this.indexedUrls)
-            if (tempURL.getUrlName().compareTo(url.getUrlName()) == 0)
-                return  url;
 
-        for (URL url: this.toIndex)
-            if (tempURL.getUrlName().compareTo(url.getUrlName()) == 0)
-                return url;
-        return null;
-    }
 
-    public synchronized ArrayList<String> getTopSearches(){
-        ArrayList<String> topSearches = new ArrayList<>();
-        for(User user: this.users)
-            topSearches.addAll(user.getSearchHistory());
 
-        Map<String, Integer> countMap = new HashMap<>();
-        for (String word : topSearches) {
-            Integer count = countMap.get(word);
-            if(count == null)
-                count = 0;
-            countMap.put(word, (count +1));
-        }
-        Map<String,Integer> topTen =
-                countMap.entrySet().stream()
-                        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                        .limit(10)
-                        .collect(Collectors.toMap(
-                                Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-
-        this.topTenSearches = new ArrayList<>(topTen.keySet());
-        return this.topTenSearches;
-    }
-
-    public synchronized ArrayList<URL> getTopPages(){
-        List<URL> sortedIndexedUrls = orderByImportance(this.indexedUrls);
-        ArrayList<URL> topTen = new ArrayList<>();
-        int max = Math.min(sortedIndexedUrls.size(), 10);
-        for(int i=0; i<max; i++)
-            topTen.add(sortedIndexedUrls.get(i));
-
-        this.topTenPages = topTen;
-        return this.topTenPages;
-    }
+ 
 }

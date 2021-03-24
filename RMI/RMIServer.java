@@ -19,7 +19,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         super();
     }
 
-    public void RegisterPerson(String username, String password, String instituicao, int telefone, String morada, int CC, Date valCC, boolean voted,String type,Data data) throws UsernameAlreadyInUseException{
+    public void RegisterPerson(String username, String password, String instituicao, int telefone, String morada, int CC, Date valCC, boolean voted,String type,Data data) throws UsernameAlreadyExistsException{
         
         if(checkPerson(username, data)) {
             data.add(new User(username, password, instituicao, telefone, morada, CC, valCC, voted, type));
@@ -48,14 +48,39 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         }
         return false;
     }
-
-    /*public void CreateElection(String username, String password, String instituicao, int telefone, String morada, int CC, Date valCC, boolean voted,String type,Data data) throws UsernameAlreadyInUseException{
-        
-        if(checkPerson(username, data)) {
-            data.add(new User(username, password, instituicao, telefone, morada, CC, valCC, voted, type));
+    
+    public void CreateElection(Date dataI, Date dataF, String titulo, String descricao, String instituicao, Data data) throws ElectionAlreadyExistsException{
+        if(!checkElections(titulo, data.getElections())) {
+            data.add(new Election(dataI, dataF, titulo, descricao, instituicao));
             data.updateRecords();
         }
         else
-            throw new UsernameAlreadyExistsException("Username already exists!");
-    }*/
+            throw new ElectionAlreadyExistsException("Election already exists!");
+    }
+
+    private boolean checkElections(String titulo,ArrayList<Election> elections){
+        for(Election election: elections){
+            if(election.getTitulo().compareTo(titulo) == 0)
+                return true;
+        }
+        return false;
+    }
+
+    private boolean checkElectionIsOngoing(Election election){
+        Date currentDate = new Date(); 
+        if(election.getDataI().before(currentDate) && election.getDataF().after(currentDate))return true;
+        return false;
+    }
+
+    private boolean checkIfCanVote(User user,Election election){
+        if(user.getInstituicao().compareTo(election.getInstituicao()) == 0 && checkElectionIsOngoing(election)){
+            return true;
+        }
+        return false;
+    } 
+
+    private void addUserToElection(User user, Election election){
+        election.listaCandidatos.add(user);
+    }
+    
 }

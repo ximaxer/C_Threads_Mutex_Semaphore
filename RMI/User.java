@@ -17,6 +17,7 @@ public class User implements Serializable {
     private Date valCC;
     private boolean voted;
     private String type;
+    private boolean loggedIn;
     
     public User(String username, String password, String instituicao, int telefone, String morada, int CC, Date valCC, boolean voted,String type) {
         this.username = username;
@@ -28,6 +29,15 @@ public class User implements Serializable {
         this.valCC = valCC;
         this.voted = voted;
         this.type = type;
+        this.loggedIn = false;
+    }
+
+    public void setLoggedIn(boolean value) throws Exception {
+        this.loggedIn = value;                          // há limite de terminais de voto
+    }
+
+    public boolean checkPassword(String other){
+        return this.password.compareTo(other) == 0;
     }
 
     public static long getSerialVersionUID() {
