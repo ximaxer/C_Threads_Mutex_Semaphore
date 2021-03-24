@@ -1,8 +1,5 @@
-package misc;
+package RMI;
 
-
-import misc.excep.InvalidUsername;
-import misc.except.WrongPassword;
 
 public class Login {
     private String username;

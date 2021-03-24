@@ -1,11 +1,10 @@
-package misc;
+package RMI;
 
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
 
-import misc.excep.InvalidUsername;
 
 public class Data {
     private ArrayList<User> users;

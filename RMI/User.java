@@ -1,6 +1,9 @@
+package RMI;
+
 import java.net.*;
 import java.io.*;
 import java.io.Serializable;
+import java.util.Date;
 
 public class User implements Serializable {
 
@@ -66,3 +69,4 @@ public class User implements Serializable {
     public String getType() {
         return this.type;
     }
+}
