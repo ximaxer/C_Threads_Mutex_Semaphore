@@ -2,7 +2,7 @@ import java.net.*;
 import java.io.*;
 import java.io.Serializable;
 
-public class DB implements Serializable {
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String username;
@@ -13,8 +13,9 @@ public class DB implements Serializable {
     private int CC;
     private Date valCC;
     private boolean voted;
+    private String type;
     
-    public DB(String username, String password, String instituicao, int telefone, String morada, int CC, Date valCC, boolean voted) {
+    public User(String username, String password, String instituicao, int telefone, String morada, int CC, Date valCC, boolean voted,String type) {
         this.username = username;
         this.password = password;
         this.instituicao = instituicao;
@@ -23,6 +24,7 @@ public class DB implements Serializable {
         this.CC = CC;
         this.valCC = valCC;
         this.voted = voted;
+        this.type = type;
     }
 
     public static long getSerialVersionUID() {
@@ -30,33 +32,37 @@ public class DB implements Serializable {
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     public String getInstituicao() {
-        return instituicao;
+        return this.instituicao;
     }
 
     public int getTelefone() {
-        return telefone;
+        return this.telefone;
     }
 
     public String getMorada() {
-        return morada;
+        return this.morada;
     }
 
     public int getCC() {
-        return CC;
+        return this.CC;
     }
 
     public Date getValCC() {
-        return valCC;
+        return this.valCC;
     }
 
     public boolean isVoted() {
-        return voted;
+        return this.voted;
+    }
+
+    public String getType() {
+        return this.type;
     }
