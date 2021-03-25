@@ -15,6 +15,7 @@ public class Election implements Serializable {
     private String descricao;
     private String instituicao;
     private ArrayList<User> listaCandidatos;
+    private ArrayList<Table> listaMesas;
 
     public Election(Date dataI, Date dataF, String titulo, String descricao, String instituicao){
         this.dataI = dataI;
@@ -23,6 +24,7 @@ public class Election implements Serializable {
         this.descricao = descricao;
         this.instituicao = instituicao;
         this.listaCandidatos = new ArrayList<>();
+        this.listaMesas = new ArrayList<>();
     
     }
     
@@ -46,4 +48,11 @@ public class Election implements Serializable {
         return instituicao;
     }
 
+    public ArrayList<User> getListaCandidatos() {
+        return listaCandidatos;
+    }
+
+    public ArrayList<Table> getListaMesas() {
+        return listaMesas;
+    }
 }

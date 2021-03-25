@@ -10,6 +10,7 @@ public class Data {
     private ArrayList<User> users;
     private ArrayList<Admin> admins;
     private ArrayList<Election> elections;
+    private ArrayList<Table> tables;
 
     private HashMap<String, String> sessionFiles;
     private static String DEFAULT_USERS_FILE = "files/usersObjFile";
@@ -21,6 +22,7 @@ public class Data {
         this.users = new ArrayList<>();
         this.admins = new ArrayList<>();
         this.elections = new ArrayList<>();
+        this.tables = new ArrayList<>();
         this.sessionFiles = new HashMap<>();
     }
 
@@ -38,12 +40,19 @@ public class Data {
         this.elections.add(election);
     }
 
-    public synchronized void loadData(){
+    public void add(Table table){
+        this.tables.add(table);
+    }  
+    
+    public void remove(Table table){
+        this.tables.remove(table);
+    } 
+
+    public synchronized void loadData() throws Exception{
         readFile(DEFAULT_USERS_FILE, 1);
         readFile(DEFAULT_ADMINS_FILE, 2);
         readFile(DEFAULT_ELECTIONS_FILE, 3);
         logoutEveryone();
-        fillQueue();
 
         this.sessionFiles.put("users", DEFAULT_USERS_FILE);
         this.sessionFiles.put("admins", DEFAULT_ADMINS_FILE);
@@ -51,14 +60,14 @@ public class Data {
 
     }
 
-    private void logoutEveryone() {
+    private void logoutEveryone() throws Exception {
         for (User user: this.users)
-            user.forceSetLoggedIn(false);
+            user.setLoggedIn(false);
         for (Admin admin: this.admins)
-            admin.forceSetLoggedIn(false);
+            admin.setLoggedIn(false);
     }
 
-    public synchronized void loadData(String userFileName, String adminFileName, String electionFileName){
+    public synchronized void loadData(String userFileName, String adminFileName, String electionFileName) throws Exception{
         readFile(electionFileName, 3);
         readFile(adminFileName, 2);
         readFile(userFileName, 1);
@@ -66,7 +75,7 @@ public class Data {
         this.sessionFiles.put("users", userFileName);
         this.sessionFiles.put("admins", adminFileName);
         this.sessionFiles.put("elections", electionFileName);
-    p}
+    }
 
     public ArrayList<User> getUsers() {
         return users;
@@ -91,57 +100,6 @@ public class Data {
     public ArrayList<Election> getElections() {
         return elections;
     }
-
-
-
-    private void fillQueue(){
-        HashSet<URL> uniqueUrls = new HashSet<>();
-        for (HashSet<URL> urls: this.reverseIndex.values())
-            uniqueUrls.addAll(urls);
-
-        ArrayList<URL> shuffledList = new ArrayList<>();
-
-        for (URL url: uniqueUrls) {
-            if (!url.getVisited())
-                shuffledList.add(url);
-            if (url.getLinksFromThis() != null)
-                for (URL innerUrl : url.getLinksFromThis())
-                    if (!innerUrl.getVisited())
-                        shuffledList.add(innerUrl);
-        }
-
-        Collections.shuffle(shuffledList);
-        this.toIndex.addAll(shuffledList);
-    }
-
-    public HashSet<URL> getUrls(){
-        return this.indexedUrls;
-    }
-
-    public synchronized void updateUrls(URL newUrl){
-        for (URL indexed: this.indexedUrls){
-            if (newUrl.getLinksFromThis().contains(indexed)){
-                indexed.addLinkToThis(newUrl);
-            }
-        }
-    }
-
-    public synchronized void updateDataToSync(String urlName, ArrayList<String> words,ArrayList<String> links){
-        ArrayList<URL> linksInUrl = new ArrayList<>();
-        for (String link : links)
-            linksInUrl.add(new URL(link));
-        URL url = new URL(urlName, linksInUrl);
-        this.toSync.put(url, words);
-    }
-
-    public HashMap<URL, ArrayList<String>> getDataToSync(){
-        return this.toSync;
-    }
-
-    public void clearDataToSync(){
-        this.toSync = new HashMap<>();
-    }
-   
 
     public synchronized void updateRecords(){
         writeFile(this.sessionFiles.get("users"), 1);
