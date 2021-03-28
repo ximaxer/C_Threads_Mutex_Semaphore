@@ -4,7 +4,6 @@ import java.net.InetAddress;
 import java.io.IOException;
 import java.util.Scanner;
 import RMI.CONST;
-
 /**
  * The MulticastClient class joins a multicast group and loops receiving
  * messages from that group. The client also runs a MulticastUser thread that
@@ -21,7 +20,7 @@ import RMI.CONST;
 
 // LISTENER
 public class MulticastClient extends Thread {
-    
+    public static boolean LogResult=false;
     public static void main(String[] args) {
         MulticastClient client = new MulticastClient();
         client.start();
@@ -30,6 +29,7 @@ public class MulticastClient extends Thread {
     }
 
     public void run() {
+        String myID="";
         MulticastSocket socket = null;
         try {
             socket = new MulticastSocket(CONST.MULTICAST.PORT);  // create socket and bind it
@@ -40,8 +40,18 @@ public class MulticastClient extends Thread {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 socket.receive(packet);
 
-                String message = new String(packet.getData(), 0, packet.getLength());
-                System.out.println(packet.getAddress().getHostAddress() + ":" + packet.getPort() + " : "+message);
+                if(!myID.equals("")){       //terminal ja recebeu o ip
+                    String message = new String(packet.getData(), 0, packet.getLength());
+                    if(myID.equals(packet.getAddress().getHostAddress())){
+                        System.out.println(packet.getAddress().getHostAddress() +"|"+message);
+                    }
+                    
+
+
+                }else{                      //terminal ainda nao recebeu o ip
+                    System.out.println("Terminal IP:    "+packet.getAddress().getHostAddress());
+                    myID = packet.getAddress().getHostAddress();
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,24 +63,42 @@ public class MulticastClient extends Thread {
 
 // SENDER
 class MulticastUser extends Thread {
+    boolean hasIP=false;
+    boolean LoggedIn = false;
     public MulticastUser() {
         super("User " + (long) (1));
     }
 
     public void run() {
+        LoggedIn = MulticastClient.LogResult;
         MulticastSocket socket = null;
         Scanner keyboardScanner = null;
-        System.out.println(this.getName() + " ready...");
+        String message = "";
+        keyboardScanner = new Scanner(System.in);
+        System.out.print(this.getName() + " ready, ");
         try {
-            socket = new MulticastSocket();  // create socket without binding it (only for sending)
-            keyboardScanner = new Scanner(System.in);
             while (true) {
-                String readKeyboard = keyboardScanner.nextLine();
-                byte[] buffer = readKeyboard.getBytes();
+                socket = new MulticastSocket();  // create socket without binding it (only for sending)
+                if(hasIP){   
+                    if(!LoggedIn){
+                        message = RequestLogin();
+                        LoggedIn=true;
+                    }else{
+                        message = keyboardScanner.nextLine();
+                    }
+                    byte[] buffer = message.getBytes();
 
-                InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
-                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
-                socket.send(packet);
+                    InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
+                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
+                    socket.send(packet);
+                }else{
+                        message = "give my my ip";
+                        byte[] buffer = message.getBytes();
+                        InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
+                        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
+                        socket.send(packet);
+                        hasIP=true;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,4 +107,31 @@ class MulticastUser extends Thread {
             socket.close();
         }
     }
+
+    public String RequestLogin(){
+        String username="", password="";
+        Scanner input = null;
+        input = new Scanner(System.in);
+        System.out.printf("\nUsername:");
+        username = input.nextLine();
+        System.out.printf("\nPassword:");
+        password = input.nextLine();
+        
+        input.close();
+        return createLoginMessage(username, password);
+    }
+    public String createLoginMessage(String username, String password){
+        return "type|login;username|"+username+";password|"+password;
+    }    
+
+
+
+
+
+
+
+
+
+
+        //          type|login;username|abc;password|123
 }

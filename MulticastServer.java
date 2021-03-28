@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.*;
 import java.util.*;
 
+import javax.lang.model.util.ElementScanner6;
+
 public class MulticastServer extends Thread{
 
     private static int BUFFER_SIZE = 256;
@@ -34,11 +36,11 @@ public class MulticastServer extends Thread{
                 System.out.println("waiting.");
                 socket.receive(packet);
                 String message = new String(packet.getData(), 0, packet.getLength());
-                System.out.println(packet.getAddress()+" : "+message); //DEBUG
+                System.out.println(packet.getAddress()+"|"+message); //DEBUG
 
                 String response = this.handle(message);
                 if (response != null) {
-                    System.out.println("SENDING RESPONSE: "+response + "to "+packet.getAddress()); //DEBUG
+                    System.out.println("SENDING RESPONSE: "+ response + "to "+packet.getAddress()); //DEBUG
                     buffer = response.getBytes();
                     packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
                     socket = new MulticastSocket();
@@ -76,9 +78,13 @@ public class MulticastServer extends Thread{
 
 
 	private String createResponse(HashMap<String, String> messageMap) throws InvalidRequestType{
+        String result= evalCredentials(messageMap.get("username"),messageMap.get("password");
 		switch (messageMap.get("type")){
 			case "login":
-				return "username|"+messageMap.get("username")+";password|"+messageMap.get("password")+";type|status;logged|" +";msg| Welcome to eVoting";
+                if(result.equals("Success!"))
+				return "type|status;logged|on;msg|Welcome to eVoting";
+                else
+                return "type|status;logged|out;msg|"+result;
 			case "exit":
 				return "username|" + messageMap.get("id")+";type|status;" + "exited";
 			default:

@@ -11,5 +11,6 @@ public interface RMIInterface extends Remote{
     void CreateElection(Date dataI, Date dataF, String titulo, String descricao, String instituicao, Data data) throws ElectionAlreadyExistsException;
     void addTableToElection(Table table, Election election) throws RemoteException;
     void removeTableFromElection(Table table, Election election) throws RemoteException;
+    String evalCredentials(String username, String password) throws RemoteException, Exception;
     long backupServer() throws RemoteException, UnknownHostException;
 }

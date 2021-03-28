@@ -99,6 +99,55 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         election.getListaMesas().remove(table);
     }
 
+    private String evalCredentials(String username, String password) throws RemoteException,Exception {
+        // check if it is a user
+        String validation="";
+        validation=checkAdmins(username,password);
+        if (validation.equals("Incorrect Password!")){
+            return "Incorrect Password!";
+        }else if(validation != ""){
+            data.updateRecords();
+            return "Success!";
+        }else{
+            validation = checkUsers(username,password);
+            if (validation.equals("")){
+                return "User not found!";
+            }else if(validation.equals("Incorrect Password!")){
+                return "Incorrect Password!";
+            }else{
+                data.updateRecords();
+                return "Success!";
+            }
+        }
+    }
+
+    private String checkAdmins(String username,String password) throws WrongPassword,Exception{
+        for (Admin admin: data.getAdmins()){
+            if (admin.getUsername().compareTo(username) == 0){
+                if (!admin.checkPassword(password))
+                    return "Incorrect Password!";
+                else{
+                    admin.setLoggedIn(true);
+                    return username;
+                }
+            }
+        }
+        return "";
+    }
+
+    private String checkUsers(String username,String password) throws WrongPassword,Exception{
+        for (User user: data.getUsers()){
+            if (user.getUsername().compareTo(username) == 0){
+                if (!user.checkPassword(password))
+                    return "Incorrect Password!";
+                else{
+                    user.setLoggedIn(true);
+                    return username;
+                }
+            }
+        }
+        return "";
+    }
 
 
     public long backupServer(){
