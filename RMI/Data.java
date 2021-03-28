@@ -120,10 +120,10 @@ public class Data {
     }
 
     private synchronized void readFile(String filename, int variableFlag){
-        try {
+        /*try {
             FileInputStream file = new FileInputStream(new File(filename));
             ObjectInputStream objStream = new ObjectInputStream(file);
-
+            
             switch (variableFlag) {
                 case 1:
                     this.users = (ArrayList<User>) objStream.readObject();
@@ -133,7 +133,7 @@ public class Data {
                     break;
                 
             }
-
+            
             objStream.close();
             file.close();
 
@@ -141,6 +141,7 @@ public class Data {
             e.printStackTrace();
             exitProgram();
         }
+        */
     }
 
     private synchronized void writeFile(String filename, int variableFlag){

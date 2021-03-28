@@ -99,7 +99,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         election.getListaMesas().remove(table);
     }
 
-    private String evalCredentials(String username, String password) throws RemoteException,Exception {
+    public String evalCredentials(String username, String password) throws RemoteException,Exception {
         // check if it is a user
         String validation="";
         validation=checkAdmins(username,password);
@@ -194,4 +194,5 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
             }
     }
 }
+
 }

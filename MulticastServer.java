@@ -1,6 +1,8 @@
 import RMI.CONST;
 import RMI.InvalidRequestType;
-
+import RMI.RMIInterface;
+import java.rmi.*;
+import java.rmi.registry.LocateRegistry;
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
@@ -11,8 +13,11 @@ public class MulticastServer extends Thread{
 
     private static int BUFFER_SIZE = 256;
     private String serverID;
+    private static RMIInterface rmi;
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws RemoteException, NotBoundException{
+        
+        rmi = (RMIInterface) LocateRegistry.getRegistry(7420).lookup("server");
         System.out.println("SERVER Initializing...");
         MulticastServer server = new MulticastServer();
         server.start();
@@ -52,10 +57,13 @@ public class MulticastServer extends Thread{
             assert socket != null;
             socket.close();
 
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
-	String handle(String message) {
+	String handle(String message) throws RemoteException, Exception {
 		HashMap<String, String> messageMap = parseMessage(message);
 		if (messageMap == null)	return null;
 		try { return createResponse(messageMap); }
@@ -77,9 +85,9 @@ public class MulticastServer extends Thread{
 
 
 
-	private String createResponse(HashMap<String, String> messageMap) throws InvalidRequestType{
-        String result= evalCredentials(messageMap.get("username"),messageMap.get("password");
-		switch (messageMap.get("type")){
+	private String createResponse(HashMap<String, String> messageMap) throws InvalidRequestType, RemoteException, Exception{
+        String result= rmi.evalCredentials(messageMap.get("username"),messageMap.get("password"));
+		switch (messageMap.get("type")){    
 			case "login":
                 if(result.equals("Success!"))
 				return "type|status;logged|on;msg|Welcome to eVoting";

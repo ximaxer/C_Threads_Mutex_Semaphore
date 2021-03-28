@@ -14,8 +14,8 @@ public class Election implements Serializable {
     private String titulo;
     private String descricao;
     private String instituicao;
-    private ArrayList<User> listaCandidatos;
-    private ArrayList<Table> listaMesas;
+    private ArrayList<User> listaCandidatos = new ArrayList<>();
+    private ArrayList<Table> listaMesas = new ArrayList<>();
 
     public Election(Date dataI, Date dataF, String titulo, String descricao, String instituicao){
         this.dataI = dataI;
