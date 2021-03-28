@@ -7,7 +7,7 @@ import java.net.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 
 
 import static java.lang.Thread.sleep;
@@ -27,9 +27,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         }catch (Exception e){}
     }
 
-    public void RegisterPerson(String username, String password, String instituicao, int telefone, String morada, int CC, Date valCC,String type) throws RemoteException, UsernameAlreadyExistsException{
+    public void RegisterPerson(String username, String password, String instituicao, int telefone, String morada, int CC, Calendar valCC,String type) throws RemoteException, UsernameAlreadyExistsException{
         
-        if(checkPerson(username, data)) {
+        if(checkPerson(username)) {
             data.add(new User(username, password, instituicao, telefone, morada, CC, valCC, false, type));
             data.updateRecords();
         }
@@ -37,7 +37,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
             throw new UsernameAlreadyExistsException("Username already exists!");
     }
 
-    public boolean checkPerson(String username,Data data){
+    public boolean checkPerson(String username){
         return !(checkAdminExists(username, data.getAdmins()) | checkUserExists(username, data.getUsers()));
     }
 
@@ -57,7 +57,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return false;
     }
     
-    public void CreateElection(Date dataI, Date dataF, String titulo, String descricao, String instituicao, Data data) throws ElectionAlreadyExistsException{
+    public void CreateElection(Calendar dataI, Calendar dataF, String titulo, String descricao, String instituicao) throws ElectionAlreadyExistsException{
         if(!checkElections(titulo, data.getElections())) {
             data.add(new Election(dataI, dataF, titulo, descricao, instituicao));
             data.updateRecords();
@@ -75,8 +75,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     }
 
     public boolean checkElectionIsOngoing(Election election){
-        Date currentDate = new Date(); 
-        if(election.getDataI().before(currentDate) && election.getDataF().after(currentDate))return true;
+        Calendar currentDate = Calendar.getInstance();
+        if(election.getDataI().before(currentDate.getTime()) && election.getDataF().after(currentDate.getTime()))return true;
         return false;
     }
 
@@ -154,45 +154,20 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return ProcessHandle.current().pid();
     }
 
-    public static void main(String[] args) throws AccessException, RemoteException, NotBoundException{
-        System.getProperties().put("java.security.policy", "policy.all");
-        boolean exitFlag = false;
-        long primaryRMIPid = 0;
-        while(!exitFlag) {
-            try {
-                RMIServer rmi = new RMIServer();
-                Registry r = LocateRegistry.createRegistry(7420);
-                r.rebind("server", rmi);
-                System.out.println("RMI Server ready.");
-                // Makes the connected Server the principal server
-                exitFlag = true;
-            } catch (RemoteException re) {
-                System.err.println("Backup Server Running...");
-                exitFlag = false;
-                RMIInterface rmi = (RMIInterface) LocateRegistry.getRegistry(7420).lookup("server");
-                boolean errorDetected = false;
-                // Backup server sends 5 messages to the principal server each 0.5s to check if there is a response
-                while (!errorDetected){
-                    for (int i=0; i<5; i++){
-                        try {
-                            primaryRMIPid = rmi.backupServer();
-                            sleep(500);
-                        } catch (Exception e) {
-                            System.err.println("Primary Server Stopped. Escalating Secondary to Primary...");
-                            errorDetected = true;
-                            break;
-                        }
-                    }
-                }
-                // STONITH if there is no response
-                String cmd = "taskkill /F /PID " + primaryRMIPid;
-                try {
-                    Runtime.getRuntime().exec(cmd);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+    public static void main(String[] args) throws AccessException, RemoteException, NotBoundException, MalformedURLException{
+        //System.getProperties().put("java.security.policy", "policy.all");
+        try {
+            RMIServer rmi = new RMIServer();
+            Naming.rebind("server", rmi);
+            System.out.println("RMI Server ready.");
+        } catch (RemoteException re) {
+            System.out.println("Exception in RMIServer.main: " + re);
+        }
+        catch (MalformedURLException e) {
+            System.out.println("MalformedURLException in RMIServer.main: " + e);
+        }
+           
+           
     }
-}
 
 }

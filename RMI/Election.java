@@ -5,19 +5,19 @@ import java.util.*;
 import java.net.*;
 import java.io.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.ArrayList;
 
 public class Election implements Serializable {
-    private Date dataI;
-    private Date dataF;
+    private Calendar dataI;
+    private Calendar dataF;
     private String titulo;
     private String descricao;
     private String instituicao;
     private ArrayList<User> listaCandidatos = new ArrayList<>();
     private ArrayList<Table> listaMesas = new ArrayList<>();
 
-    public Election(Date dataI, Date dataF, String titulo, String descricao, String instituicao){
+    public Election(Calendar dataI, Calendar dataF, String titulo, String descricao, String instituicao){
         this.dataI = dataI;
         this.dataF = dataF;
         this.titulo = titulo;
@@ -28,11 +28,11 @@ public class Election implements Serializable {
     
     }
     
-    public Date getDataI() {
+    public Calendar getDataI() {
         return dataI;
     }
 
-    public Date getDataF() {
+    public Calendar getDataF() {
         return dataF;
     }
 

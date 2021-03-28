@@ -3,7 +3,7 @@ package RMI;
 import java.net.*;
 import java.io.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.util.Calendar;
 
 public class User implements Serializable {
 
@@ -14,12 +14,12 @@ public class User implements Serializable {
     private int telefone;
     private String morada;
     private int CC;
-    private Date valCC;
+    private Calendar valCC;
     private boolean voted;
     private String type;
     private boolean loggedIn;
     
-    public User(String username, String password, String instituicao, int telefone, String morada, int CC, Date valCC, boolean voted,String type) {
+    public User(String username, String password, String instituicao, int telefone, String morada, int CC, Calendar valCC, boolean voted,String type) {
         this.username = username;
         this.password = password;
         this.instituicao = instituicao;
@@ -68,7 +68,7 @@ public class User implements Serializable {
         return this.CC;
     }
 
-    public Date getValCC() {
+    public Calendar getValCC() {
         return this.valCC;
     }
 
