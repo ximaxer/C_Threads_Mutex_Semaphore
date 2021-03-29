@@ -27,6 +27,20 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         }catch (Exception e){}
     }
 
+    public void adicionarMesaDeVoto(String departamento) throws RemoteException{
+        if(!checkTableExists(departamento)){
+            data.add(new Table(departamento));
+        }
+    }
+
+    public boolean checkTableExists(String departamento){
+        for(Table table: data.getTables()){
+            if(table.getDepartamento().compareTo(departamento) == 0)
+                return true;
+        }
+        return false;
+    }
+
     public void RegisterPerson(String username, String password, String instituicao, int telefone, String morada, int CC, Calendar valCC,String type) throws RemoteException, UsernameAlreadyExistsException{
         
         if(checkPerson(username)) {
@@ -56,6 +70,22 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         }
         return false;
     }
+    
+    public void ShowActiveElections() throws RemoteException{
+        for(Election election: data.getElections()){
+            if(checkElectionIsOngoing(election)) System.out.println(election.getTitulo());
+        }
+    }
+
+    public boolean VerifyIfActiveElection(String nome) throws RemoteException{
+        for(Election election: data.getElections()){
+            if(election.getTitulo().compareTo(nome)==0){
+                if(checkElectionIsOngoing(election)) return true;
+            }
+        }
+        return false;
+    }
+    
     
     public void CreateElection(Calendar dataI, Calendar dataF, String titulo, String descricao, String instituicao) throws ElectionAlreadyExistsException{
         if(!checkElections(titulo, data.getElections())) {
@@ -87,12 +117,43 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return false;
     } 
 
-    public void addUserToElection(User user, Election election){
-        election.getListaCandidatos().add(user);
+    public String addListaToElection(String listaNome, String electionName) throws RemoteException{
+        if(!VerifyIfActiveElection(electionName))return "Eleicao nao existe!";
+        for(Listas lista: data.getElection(electionName).getListas()){
+            if(lista.getName().compareTo(listaNome) == 0)
+                return "Lista ja se encontra associada a esta eleicao!";
+        }
+        data.getElection(electionName).getListas().add(new Listas(listaNome));
+        return "Lista associada com sucesso!";
     }
 
-    public void addTableToElection(Table table, Election election) throws RemoteException{
-        election.getListaMesas().add(table);
+
+    public void addUserToElection(User user, Election election){
+        election.getListaCandidatosQueVotaram().add(user);
+    }
+
+    public String addTableToElection(String table, String electionName) throws RemoteException{
+        if(!VerifyIfActiveElection(electionName))return "Eleicao nao existe!";
+        if(!checkTableExists(table))return "Este departamento nao tem mesa!";
+        for(Table mesa: data.getElection(electionName).getListaMesas()){
+            if(mesa.getDepartamento().compareTo(table) == 0)
+                return "Mesa ja se encontra associada a esta eleicao!";
+        }
+        data.getElection(electionName).getListaMesas().add(data.getTable(table));
+        return "Mesa associada com sucesso!";
+    }
+    
+    public String removeTableFromElection(String table, String electionName) throws RemoteException{
+        if(!VerifyIfActiveElection(electionName))return "Eleicao nao existe!";
+        if(!checkTableExists(table))return "Este departamento nao tem mesas!";
+        for(Table mesa: data.getElection(electionName).getListaMesas()){
+            if(mesa.getDepartamento().compareTo(table) == 0){
+                data.getElection(electionName).getListaMesas().remove(data.getTable(table));
+                return "Mesa desassociada com sucesso!";
+            }
+        }
+        return "Mesa ja nao se encontra associada a esta eleicao!";
+        
     }
     
     public void removeTableFromElection(Table table, Election election) throws RemoteException{

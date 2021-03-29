@@ -14,8 +14,9 @@ public class Election implements Serializable {
     private String titulo;
     private String descricao;
     private String instituicao;
-    private ArrayList<User> listaCandidatos = new ArrayList<>();
+    private ArrayList<User> hasVoted = new ArrayList<>();
     private ArrayList<Table> listaMesas = new ArrayList<>();
+    private ArrayList<Listas> listas = new ArrayList<>();
 
     public Election(Calendar dataI, Calendar dataF, String titulo, String descricao, String instituicao){
         this.dataI = dataI;
@@ -23,8 +24,9 @@ public class Election implements Serializable {
         this.titulo = titulo;
         this.descricao = descricao;
         this.instituicao = instituicao;
-        this.listaCandidatos = new ArrayList<>();
+        this.hasVoted = new ArrayList<>();
         this.listaMesas = new ArrayList<>();
+
     
     }
     
@@ -48,11 +50,15 @@ public class Election implements Serializable {
         return instituicao;
     }
 
-    public ArrayList<User> getListaCandidatos() {
-        return listaCandidatos;
+    public ArrayList<User> getListaCandidatosQueVotaram() {
+        return hasVoted;
     }
 
     public ArrayList<Table> getListaMesas() {
         return listaMesas;
+    }
+
+    public ArrayList<Listas> getListas() {
+        return listas;
     }
 }

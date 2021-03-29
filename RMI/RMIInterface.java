@@ -9,8 +9,11 @@ public interface RMIInterface extends Remote{
 
     void RegisterPerson(String username, String password, String instituicao, int telefone, String morada, int CC, Calendar valCC,String type) throws RemoteException, UsernameAlreadyExistsException;
     void CreateElection(Calendar dataI, Calendar dataF, String titulo, String descricao, String instituicao) throws ElectionAlreadyExistsException;
-    void addTableToElection(Table table, Election election) throws RemoteException;
+    String addTableToElection(String table, String electionName) throws RemoteException;
+    String addListaToElection(String lista, String electionName) throws RemoteException;
     void removeTableFromElection(Table table, Election election) throws RemoteException;
+    void adicionarMesaDeVoto(String departamento) throws RemoteException;
     String evalCredentials(String username, String password) throws RemoteException, Exception;
+    void ShowActiveElections() throws RemoteException;
     long backupServer() throws RemoteException, UnknownHostException;
 }

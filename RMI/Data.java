@@ -11,6 +11,7 @@ public class Data {
     private ArrayList<Admin> admins;
     private ArrayList<Election> elections;
     private ArrayList<Table> tables;
+    private ArrayList<Listas> listas;
 
     private HashMap<String, String> sessionFiles;
     private static String DEFAULT_USERS_FILE = "files/usersObjFile";
@@ -23,6 +24,7 @@ public class Data {
         this.admins = new ArrayList<>();
         this.elections = new ArrayList<>();
         this.tables = new ArrayList<>();
+        this.listas = new ArrayList<>();
         this.sessionFiles = new HashMap<>();
     }
 
@@ -42,10 +44,15 @@ public class Data {
 
     public void add(Table table){
         this.tables.add(table);
-    }  
+    } 
+    
     
     public void remove(Table table){
         this.tables.remove(table);
+    } 
+
+    public void add(Listas lista){
+        this.listas.add(lista);
     } 
 
     public synchronized void loadData() throws Exception{
@@ -81,6 +88,41 @@ public class Data {
         return users;
     }
 
+    public ArrayList<Table> getTables(){
+        return tables;
+    }
+
+    public ArrayList<Admin> getAdmins() {
+        return admins;
+    }
+
+    public ArrayList<Election> getElections() {
+        return elections;
+    }
+
+    public ArrayList<Listas> getListas() {
+        return listas;
+    }
+
+    public Election getElection(String name) {
+        for(Election election: elections){
+            if(election.getTitulo().compareTo(name) == 0){
+                return election;
+            }
+        }
+        return null;
+    }
+
+
+    public Table getTable(String departamento) {
+        for(Table table: tables){
+            if(table.getDepartamento().compareTo(departamento) == 0){
+                return table;
+            }
+        }
+        return null;
+    }
+
     public User getUser(String username) throws InvalidUsername {
         for (Admin admin: this.admins)
             if(admin.getUsername().compareTo(username) == 0)
@@ -93,13 +135,7 @@ public class Data {
         throw new InvalidUsername("User not found!");
     }
 
-    public ArrayList<Admin> getAdmins() {
-        return admins;
-    }
-
-    public ArrayList<Election> getElections() {
-        return elections;
-    }
+    
 
     public synchronized void updateRecords(){
         writeFile(this.sessionFiles.get("users"), 1);

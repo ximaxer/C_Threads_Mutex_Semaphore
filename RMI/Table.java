@@ -1,19 +1,11 @@
 package RMI;
 
-import java.util.*;
-import java.net.*;
-import java.io.*;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.ArrayList;
-
 public class Table {
     private String departamento;
-    private int maxNumTerminais,terminaisAtivos;
+    private int terminaisAtivos;
     
-    public Table(String departamento,String idMesa, int maxNumTerminais){
+    public Table(String departamento){
         this.departamento = departamento;
-        this.maxNumTerminais = maxNumTerminais;
         this.terminaisAtivos = 0;
     }
 
@@ -21,9 +13,6 @@ public class Table {
         return departamento;
     }
 
-    public int getMaxNumTerminais() {
-        return maxNumTerminais;
-    }
     public int getTerminaisAtivos() {
         return terminaisAtivos;
     }
