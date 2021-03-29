@@ -13,11 +13,11 @@ public class MulticastServer extends Thread{
 
     private static int BUFFER_SIZE = 256;
     private String serverID;
-    private static RMIInterface rmi;
+    //private static RMIInterface rmi;
 
     public static void main(String[] args) throws RemoteException, NotBoundException{
         
-        rmi = (RMIInterface) LocateRegistry.getRegistry(7420).lookup("server");
+        //rmi = (RMIInterface) LocateRegistry.getRegistry(7420).lookup("server");
         System.out.println("SERVER Initializing...");
         MulticastServer server = new MulticastServer();
         server.start();
@@ -86,7 +86,8 @@ public class MulticastServer extends Thread{
 
 
 	private String createResponse(HashMap<String, String> messageMap) throws InvalidRequestType, RemoteException, Exception{
-        String result= rmi.evalCredentials(messageMap.get("username"),messageMap.get("password"));
+        //String result= rmi.evalCredentials(messageMap.get("username"),messageMap.get("password"));
+        String result ="Success!";
 		switch (messageMap.get("type")){    
 			case "login":
                 if(result.equals("Success!"))

@@ -4,6 +4,8 @@ import java.net.InetAddress;
 import java.io.IOException;
 import java.util.Scanner;
 import RMI.CONST;
+import java.util.Timer;
+import java.util.TimerTask;
 /**
  * The MulticastClient class joins a multicast group and loops receiving
  * messages from that group. The client also runs a MulticastUser thread that
@@ -29,6 +31,7 @@ public class MulticastClient extends Thread {
     }
 
     public void run() {
+        new Acaba(60,1);        //nao diz que sai
         String myID="";
         MulticastSocket socket = null;
         try {
@@ -45,8 +48,6 @@ public class MulticastClient extends Thread {
                     if(myID.equals(packet.getAddress().getHostAddress())){
                         System.out.println(packet.getAddress().getHostAddress() +"|"+message);
                     }
-                    
-
 
                 }else{                      //terminal ainda nao recebeu o ip
                     System.out.println("Terminal IP:    "+packet.getAddress().getHostAddress());
@@ -70,6 +71,7 @@ class MulticastUser extends Thread {
     }
 
     public void run() {
+        new Acaba(60,0);        //diz que sai
         LoggedIn = MulticastClient.LogResult;
         MulticastSocket socket = null;
         Scanner keyboardScanner = null;
@@ -81,6 +83,11 @@ class MulticastUser extends Thread {
                 socket = new MulticastSocket();  // create socket without binding it (only for sending)
                 if(hasIP){   
                     if(!LoggedIn){
+                        try{
+                            Thread.sleep(250);
+                        }catch (InterruptedException  e) {
+                            e.printStackTrace();
+                        }
                         message = RequestLogin();
                         LoggedIn=true;
                     }else{
@@ -114,7 +121,7 @@ class MulticastUser extends Thread {
         input = new Scanner(System.in);
         System.out.printf("\nUsername:");
         username = input.nextLine();
-        System.out.printf("\nPassword:");
+        System.out.printf("Password:");
         password = input.nextLine();
         
         input.close();
@@ -124,14 +131,27 @@ class MulticastUser extends Thread {
         return "type|login;username|"+username+";password|"+password;
     }    
 
-
-
-
-
-
-
-
-
-
         //          type|login;username|abc;password|123
+}
+
+class Acaba {
+
+    Timer timer;
+
+    public Acaba(int seconds,int trigger) {
+        timer = new Timer();
+        timer.schedule(new RemindTask(trigger), seconds * 1000);
+    }
+
+    class RemindTask extends TimerTask {
+        int tipo;
+        public RemindTask(int trigger){
+            this.tipo = trigger;
+        }
+        public void run() {
+            if(tipo == 0)System.out.printf("\nProgram terminating!");
+            System.exit(0);
+            timer.cancel(); //Terminate the timer thread
+        }
+    }
 }
