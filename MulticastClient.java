@@ -6,19 +6,7 @@ import java.util.Scanner;
 import RMI.CONST;
 import java.util.Timer;
 import java.util.TimerTask;
-/**
- * The MulticastClient class joins a multicast group and loops receiving
- * messages from that group. The client also runs a MulticastUser thread that
- * loops reading a string from the keyboard and multicasting it to the group.
- * <p>
- * The example IPv4 address chosen may require you to use a VM option to
- * prefer IPv4 (if your operating system uses IPv6 sockets by default).
- * <p>
- * Usage: java -Djava.net.preferIPv4Stack=true MulticastClient
- *
- * @author Raul Barbosa
- * @version 1.0
- */
+
 
 // LISTENER
 public class MulticastClient extends Thread {
