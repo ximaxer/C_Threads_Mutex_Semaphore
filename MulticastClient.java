@@ -2,6 +2,7 @@ import java.net.MulticastSocket;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import RMI.CONST;
 import java.util.Timer;
@@ -32,9 +33,11 @@ public class MulticastClient extends Thread {
                 socket.receive(packet);
 
                 if(!myID.equals("")){       //terminal ja recebeu o ip
+                    
+                    
                     String message = new String(packet.getData(), 0, packet.getLength());
                     if(myID.equals(packet.getAddress().getHostAddress())){
-                        System.out.println(packet.getAddress().getHostAddress() +"|"+message);
+                        System.out.println(packet.getAddress().getHostAddress() +"| "+message);
                     }
 
                 }else{                      //terminal ainda nao recebeu o ip
@@ -52,8 +55,8 @@ public class MulticastClient extends Thread {
 
 // SENDER
 class MulticastUser extends Thread {
-    boolean hasIP=false;
-    boolean LoggedIn = false;
+    private boolean hasIP=false;
+    private boolean LoggedIn = false;
     public MulticastUser() {
         super("User " + (long) (1));
     }
@@ -69,30 +72,34 @@ class MulticastUser extends Thread {
         try {
             while (true) {
                 socket = new MulticastSocket();  // create socket without binding it (only for sending)
-                if(hasIP){   
-                    if(!LoggedIn){
+                message = "";
+                if(this.hasIP){   
+                    if(!this.LoggedIn){
                         try{
                             Thread.sleep(250);
                         }catch (InterruptedException  e) {
                             e.printStackTrace();
                         }
                         message = RequestLogin();
-                        LoggedIn=true;
+                        this.LoggedIn=true;
                     }else{
-                        message = keyboardScanner.nextLine();
+                        try{
+                            message = keyboardScanner.nextLine();
+                        }catch (NoSuchElementException e){}
                     }
                     byte[] buffer = message.getBytes();
-
-                    InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
-                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
-                    socket.send(packet);
+                    if(message!=""){
+                        InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
+                        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
+                        socket.send(packet);
+                    }
                 }else{
                         message = "give my my ip";
                         byte[] buffer = message.getBytes();
                         InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
                         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
                         socket.send(packet);
-                        hasIP=true;
+                        this.hasIP=true;
                 }
             }
         } catch (IOException e) {

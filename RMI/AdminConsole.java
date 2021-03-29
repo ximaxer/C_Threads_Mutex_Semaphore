@@ -17,6 +17,12 @@ public class AdminConsole {
         }
     }
 
+    public static void ShowListas(String lista){
+        for (String fragmento_lista : lista.split(";")) {
+            System.out.printf("\n"+fragmento_lista);
+        }
+    }
+
 
     public static void main(String args[]) throws AccessException, RemoteException, NotBoundException, UsernameAlreadyExistsException, ElectionAlreadyExistsException{ 
         
@@ -148,8 +154,10 @@ public class AdminConsole {
                 rmi.CreateElection(dataI, dataF, titulo, descricao, instituicao);
                 break;
             case "6":       //Associar lista a eleicao
+            String lista="";
             System.out.printf("\nQual a eleicao a qual quer adicionar uma lista?");
-            rmi.ShowActiveElections();
+            lista = rmi.ShowActiveElections();
+            ShowListas(lista);
             try{
                 eleicao = reader.readLine();
             }catch(Exception e){}

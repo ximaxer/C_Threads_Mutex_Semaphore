@@ -71,10 +71,12 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return false;
     }
     
-    public void ShowActiveElections() throws RemoteException{
+    public String ShowActiveElections() throws RemoteException{
+        String listaEleicoes="";
         for(Election election: data.getElections()){
-            if(checkElectionIsOngoing(election)) System.out.println(election.getTitulo());
+            if(checkElectionIsOngoing(election)) listaEleicoes+=election.getTitulo()+";";
         }
+        return listaEleicoes;
     }
 
     public boolean VerifyIfActiveElection(String nome) throws RemoteException{
