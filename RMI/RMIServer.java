@@ -22,6 +22,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     protected RMIServer() throws RemoteException {
         super();
         this.data = new Data();
+        //data.createFiles();
         try{
             data.loadData();
         }catch (Exception e){}

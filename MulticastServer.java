@@ -86,8 +86,8 @@ public class MulticastServer extends Thread{
 
 
 	private String createResponse(HashMap<String, String> messageMap) throws InvalidRequestType, RemoteException, Exception{
-        //String result= rmi.evalCredentials(messageMap.get("username"),messageMap.get("password"));
-        String result ="Success!";
+        String result= rmi.evalCredentials(messageMap.get("username"),messageMap.get("password"));
+        //String result ="Success!";
 		switch (messageMap.get("type")){    
 			case "login":
                 if(result.equals("Success!"))

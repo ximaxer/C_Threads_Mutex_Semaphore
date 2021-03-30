@@ -79,4 +79,9 @@ public class User implements Serializable {
     public String getType() {
         return this.type;
     }
+    
+    @Override
+    public String toString() {
+        return "User: " + this.getUsername();
+    }
 }

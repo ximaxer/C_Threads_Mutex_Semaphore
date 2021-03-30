@@ -144,9 +144,9 @@ public class Data {
     }
 
     public void createFiles(String userFileName, String adminFileName, String electionFileName){
-        writeFile(electionFileName, 3);
         writeFile(userFileName, 1);
         writeFile(adminFileName, 2);
+        writeFile(electionFileName, 3);
     }
 
     public void createFiles(){
@@ -156,7 +156,7 @@ public class Data {
     }
 
     private synchronized void readFile(String filename, int variableFlag){
-        /*try {
+        try {
             FileInputStream file = new FileInputStream(new File(filename));
             ObjectInputStream objStream = new ObjectInputStream(file);
             
@@ -167,7 +167,9 @@ public class Data {
                 case 2:
                     this.admins = (ArrayList<Admin>) objStream.readObject();
                     break;
-                
+                case 3:
+                    this.elections = (ArrayList<Election>) objStream.readObject();
+                    break;
             }
             
             objStream.close();
@@ -177,7 +179,7 @@ public class Data {
             e.printStackTrace();
             exitProgram();
         }
-        */
+    
     }
 
     private synchronized void writeFile(String filename, int variableFlag){
@@ -196,6 +198,9 @@ public class Data {
                     break;
                 case 2:
                     objStream.writeObject(this.admins);
+                    break;
+                case 3:
+                    objStream.writeObject(this.elections);
                     break;
                 
             }

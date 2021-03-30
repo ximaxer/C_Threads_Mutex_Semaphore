@@ -7,7 +7,7 @@ import java.text.*;
 import java.rmi.registry.LocateRegistry;
 import java.util.*;
 public class AdminConsole {
-
+    private static RMIInterface rmi;
     public static boolean isInteger(String string) {
         try {
             Integer.valueOf(string);
@@ -28,9 +28,9 @@ public class AdminConsole {
     }
 
 
-    public static void main(String args[]) throws AccessException, RemoteException, NotBoundException, UsernameAlreadyExistsException, ElectionAlreadyExistsException{ 
+    public static void main(String args[]) throws AccessException, RemoteException, NotBoundException, UsernameAlreadyExistsException, ElectionAlreadyExistsException, MalformedURLException{ 
         
-        RMIInterface rmi = (RMIInterface) LocateRegistry.getRegistry(7420).lookup("server");
+        rmi = (RMIInterface) Naming.lookup("server");
 		InputStreamReader input = new InputStreamReader(System.in);
 		BufferedReader reader = new BufferedReader(input);
 		String texto = "";
@@ -50,28 +50,35 @@ public class AdminConsole {
         String descricao = "";
         String eleicao = "";
         String result = "";
-
-        System.out.printf("\n1 - Registar Pessoas\n2 - Criar mesa de voto\n3 - Associar mesa de voto\n4 - Desassociar mesa de voto\n5 - Criar eleicao\n6 - Adicionar lista a eleicao");
+        
+        System.out.printf("1 - Registar Pessoas\n2 - Criar mesa de voto\n3 - Associar mesa de voto\n4 - Desassociar mesa de voto\n5 - Criar eleicao\n6 - Adicionar lista a eleicao\n");
         try{
             texto = reader.readLine();
         }catch(Exception e){}
         switch(texto){
             case "1":       //Registar Pessoas
-                System.out.printf("\nIntroduza as suas credenciais da seguinte forma:");
-                System.out.printf("\nUsername\nPassword\nInstituicao\nTelefone\nMorada\nNumero de CC\nValidade de CC (mm/dd/aaaa;hh:mm)\nTipo de Individuo(aluno/membro/administrador)");
+                System.out.printf("Introduza as suas credenciais:\n");
+                //System.out.printf("Username\nPassword\nInstituicao\nTelefone\nMorada\nNumero de CC\nValidade de CC (mm/dd/aaaa;hh:mm)\nTipo de Individuo(aluno/membro/administrador)\n");
                 try{
+                    System.out.print("username: ");
                     username = reader.readLine();       //username
+                    System.out.print("Password: ");
                     password = reader.readLine();       //password
+                    System.out.print("Instituicao: ");
                     instituicao = reader.readLine();    //instituicao
+                    System.out.print("Telefone: ");
                     do{
                         texto = reader.readLine();          //telefone
                     }while(!isInteger(texto));
                     telefone = Integer.parseInt(texto, 10);
+                    System.out.print("Morada: ");
                     morada = reader.readLine();         //morada
+                    System.out.print("Numero de CC: ");
                     do{
                         texto = reader.readLine();          //CC
                     }while(!isInteger(texto));
                     CC = Integer.parseInt(texto, 10);
+                    System.out.print("Validade de CC (mm/dd/aaaa;hh:mm): ");
                     do{
                         texto = reader.readLine();          //valCC
                         String[] segment = texto.split(";");
@@ -85,25 +92,27 @@ public class AdminConsole {
                     }while((mes>12 || mes<1 )||(dia>31 || dia<1 )||(ano>2100 || ano<1980 )||(hora>23 || hora<0 )||(minuto>59 || minuto<0 ));
                     valCC.set(ano,mes,dia,hora,minuto);
                     do{
+                        System.out.print("Tipo de Individuo(aluno/membro/administrador): ");
                         type = reader.readLine();           //tipo
-                    }while(!type.equals("aluno") || !type.equals("membro") || !type.equals("administrador"));
+                        
+                    }while(type.compareTo("aluno") != 0 && type.compareTo("membro") != 0 && type.compareTo("administrador") != 0);
                 }catch(Exception e){}
                 rmi.RegisterPerson(username, password, instituicao, telefone, morada, CC, valCC, type);
                 break;
             case "2":       //Criar mesa de voto
-                System.out.printf("\nIntroduza o departamento onde a  mesa de voto se encontra:");
+                System.out.printf("Introduza o departamento onde a  mesa de voto se encontra:\n");
                 try{   
                     departamento = reader.readLine();       //departamento
                 }catch(Exception e){}
                     rmi.adicionarMesaDeVoto(departamento);
                 break;
                 case "3":       //Associar mesa de voto
-                System.out.printf("\nQual a eleicao a qual quer associar mesas?");
+                System.out.printf("Qual a eleicao a qual quer associar mesas?\n");
                 rmi.ShowActiveElections();
                 try{
                     eleicao = reader.readLine();
                 }catch(Exception e){}
-                System.out.printf("\nQual o nome do departamento da mesa desejada?");
+                System.out.printf("\nQual o nome do departamento da mesa desejada?\n");
                 try{
                     texto = reader.readLine();
                 }catch(Exception e){}
@@ -111,25 +120,29 @@ public class AdminConsole {
                     System.out.printf("\n%s",result);
                 break;
             case "4":       //Associar mesa de voto
-                System.out.printf("\nQual a eleicao da qual quer desassociar mesas?");
+                System.out.printf("Qual a eleicao da qual quer desassociar mesas?\n");
                 rmi.ShowActiveElections();
                 try{
                     eleicao = reader.readLine();
                 }catch(Exception e){}
-                System.out.printf("\nQual o nome do departamento da mesa desejada?");
+                System.out.printf("Qual o nome do departamento da mesa desejada?\n");
                 try{
                     texto = reader.readLine();
                 }catch(Exception e){}
                     result= rmi.removeTableFromElection(texto, eleicao);
-                    System.out.printf("\n%s",result);
+                    System.out.printf("%s\n",result);
                 break;
             case "5":       //criar eleicao
                 try{
-                    System.out.printf("\nIntroduza a informacao da seguinte forma:");
-                    System.out.printf("\nTitulo\nBreve descricao\nInstituicao\nData de Inicio (mm/dd/aaaa;hh:mm)\nData de Fim (mm/dd/aaaa;hh:mm)");
+                    System.out.printf("Introduza a informacao da seguinte forma:\n");
+                    //System.out.printf("Titulo\nBreve descricao\nInstituicao\nData de Inicio (mm/dd/aaaa;hh:mm)\nData de Fim (mm/dd/aaaa;hh:mm)\n");
+                    System.out.printf("Titulo: ");
                     titulo = reader.readLine();         //Titulo
+                    System.out.printf("Breve descricao: ");
                     descricao = reader.readLine();      //Descricao
+                    System.out.printf("Instituicao: ");
                     instituicao = reader.readLine();    //Instituicao
+                    System.out.printf("Data de Inicio (mm/dd/aaaa;hh:mm): ");
                     do{
                         texto = reader.readLine();          //Data Inicial
                         String[] segment = texto.split(";");
@@ -142,6 +155,7 @@ public class AdminConsole {
                         minuto=Integer.parseInt(time[1]);
                     }while((mes>12 || mes<1 )||(dia>31 || dia<1 )||(ano>2100 || ano<1980 )||(hora>23 || hora<0 )||(minuto>59 || minuto<0 ));
                     dataI.set(ano,mes,dia,hora,minuto);
+                    System.out.printf("Data de Fim (mm/dd/aaaa;hh:mm): ");
                     do{
                         texto = reader.readLine();          //Data Final
                         String[] segment = texto.split(";");
@@ -159,18 +173,18 @@ public class AdminConsole {
                 break;
             case "6":       //Associar lista a eleicao
             String lista="";
-            System.out.printf("\nQual a eleicao a qual quer adicionar uma lista?");
+            System.out.printf("Qual a eleicao a qual quer adicionar uma lista?\n");
             lista = rmi.ShowActiveElections();
             ShowListas(lista);
             try{
                 eleicao = reader.readLine();
             }catch(Exception e){}
-            System.out.printf("\nQual o nome da lista que quer adicionar?");
+            System.out.printf("Qual o nome da lista que quer adicionar?\n");
             try{
                 texto = reader.readLine();
             }catch(Exception e){}
                 result= rmi.addListaToElection(texto, eleicao);
-                System.out.printf("\n%s",result);
+                System.out.printf("%s\n",result);
             break;
         }
     }
