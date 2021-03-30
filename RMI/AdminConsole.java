@@ -18,6 +18,10 @@ public class AdminConsole {
     }
 
     public static void ShowListas(String lista){
+        if (lista.equals("Nao existem eleicoes ativas")){
+            System.out.printf(lista);
+            return;
+        }
         for (String fragmento_lista : lista.split(";")) {
             System.out.printf("\n"+fragmento_lista);
         }

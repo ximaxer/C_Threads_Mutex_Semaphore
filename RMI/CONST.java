@@ -9,7 +9,7 @@ public final class CONST {
 
     public final class MULTICAST{
         public static final String MULTICAST_ADDRESS = "224.3.2.1";
-        public static final int PORT = 7900;
+        public static final int PORT = 9800;
 
         private MULTICAST(){}
     }

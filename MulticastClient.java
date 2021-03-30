@@ -71,7 +71,7 @@ class MulticastUser extends Thread {
         System.out.print(this.getName() + " ready, ");
         try {
             while (true) {
-                socket = new MulticastSocket();  // create socket without binding it (only for sending)
+                socket = new MulticastSocket(CONST.MULTICAST.PORT);  // create socket without binding it (only for sending)
                 message = "";
                 if(this.hasIP){   
                     if(!this.LoggedIn){
@@ -82,16 +82,16 @@ class MulticastUser extends Thread {
                         }
                         message = RequestLogin();
                         this.LoggedIn=true;
-                    }else{
-                        try{
-                            message = keyboardScanner.nextLine();
-                        }catch (NoSuchElementException e){}
                     }
-                    byte[] buffer = message.getBytes();
+                    else{
+                            if(keyboardScanner.hasNextLine())  message = keyboardScanner.nextLine();
+                    }
                     if(message!=""){
+                        byte[] buffer = message.getBytes();
                         InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
                         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
                         socket.send(packet);
+                        message = "";
                     }
                 }else{
                         message = "give my my ip";
@@ -99,6 +99,7 @@ class MulticastUser extends Thread {
                         InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
                         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
                         socket.send(packet);
+                        message = "";
                         this.hasIP=true;
                 }
             }

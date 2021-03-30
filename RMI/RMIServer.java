@@ -76,6 +76,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         for(Election election: data.getElections()){
             if(checkElectionIsOngoing(election)) listaEleicoes+=election.getTitulo()+";";
         }
+        if(listaEleicoes.equals(""))return "Nao existem eleicoes ativas";
         return listaEleicoes;
     }
 

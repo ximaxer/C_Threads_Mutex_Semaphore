@@ -13,11 +13,11 @@ public class MulticastServer extends Thread{
 
     private static int BUFFER_SIZE = 256;
     private String serverID;
-    //private static RMIInterface rmi;
+    private static RMIInterface rmi;
 
-    public static void main(String[] args) throws RemoteException, NotBoundException{
+    public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException{
         
-        //rmi = (RMIInterface) LocateRegistry.getRegistry(7420).lookup("server");
+        rmi = (RMIInterface) Naming.lookup("server");
         System.out.println("SERVER Initializing...");
         MulticastServer server = new MulticastServer();
         server.start();
@@ -66,7 +66,7 @@ public class MulticastServer extends Thread{
 	String handle(String message) throws RemoteException, Exception {
 		HashMap<String, String> messageMap = parseMessage(message);
 		if (messageMap == null)	return null;
-		try { return createResponse(messageMap); }
+		try { return createResponse(messageMap)+"\n"+ShowListas(rmi.ShowActiveElections()); }
 		catch (InvalidRequestType e){ return null; }
 	}
 
@@ -100,4 +100,15 @@ public class MulticastServer extends Thread{
 				throw new InvalidRequestType("Unexpected value: " + messageMap.get("type"));
 		}
 	}
+
+
+    public String ShowListas(String lista){
+        if (lista.equals("Nao existem eleicoes ativas")){
+            return lista;
+        }
+        for (String fragmento_lista : lista.split(";")) {
+            lista=lista+"\n"+fragmento_lista;
+        }
+        return lista;
+    }
 }
