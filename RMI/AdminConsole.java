@@ -91,7 +91,7 @@ public class AdminConsole {
                         hora=Integer.parseInt(time[0]);
                         minuto=Integer.parseInt(time[1]);
                     }while((mes>12 || mes<1 )||(dia>31 || dia<1 )||(ano>2100 || ano<1980 )||(hora>23 || hora<0 )||(minuto>59 || minuto<0 ));
-                    valCC.set(ano,mes,dia,hora,minuto);
+                    valCC.set(ano,mes-1,dia,hora,minuto);
                     do{
                         System.out.print("Tipo de Individuo(aluno/membro/administrador): ");
                         type = reader.readLine();           //tipo
@@ -157,7 +157,7 @@ public class AdminConsole {
                         hora=Integer.parseInt(timeI[0]);
                         minuto=Integer.parseInt(timeI[1]);
                     }while((mes>12 || mes<1 )||(dia>31 || dia<1 )||(ano>2100 || ano<1980 )||(hora>23 || hora<0 )||(minuto>59 || minuto<0 ));
-                    dataI.set(ano,mes,dia,hora,minuto);
+                    dataI.set(ano,mes-1,dia,hora,minuto);
                     mes=13;
                     dia=32;
                     ano=0;
@@ -175,7 +175,7 @@ public class AdminConsole {
                         hora=Integer.parseInt(timeF[0]);
                         minuto=Integer.parseInt(timeF[1]);
                     }while((mes>12 || mes<1 )||(dia>31 || dia<1 )||(ano>2100 || ano<1980 )||(hora>23 || hora<0 )||(minuto>59 || minuto<0 ));
-                    dataF.set(ano,mes,dia,hora,minuto);
+                    dataF.set(ano,mes-1,dia,hora,minuto);
                 }catch(Exception e){}
                 String b = rmi.CreateElection(dataI, dataF, titulo, descricao, instituicao);
                 System.out.println(b);

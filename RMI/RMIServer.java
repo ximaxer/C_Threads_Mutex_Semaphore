@@ -119,7 +119,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
 
     public boolean checkElectionIsOngoing(Election election){
         Calendar currentDate = Calendar.getInstance();
-        if(election.getDataI().getTime().before(currentDate.getTime()) && election.getDataF().getTime().after(currentDate.getTime()))return true;
+        //if(election.getDataI().getTime().before(currentDate.getTime()) && election.getDataF().getTime().after(currentDate.getTime()))return true;
+        //System.out.println(election.getTitulo()+" data atual:" + currentDate.getTime() +"  data inicio:" + election.getDataI().getTime()+" data fim:" + election.getDataF().getTime());
+        if((election.getDataI().compareTo(currentDate) == -1) && (election.getDataF().compareTo(currentDate) == 1)) return true;
         return false;
     }
 
