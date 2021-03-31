@@ -84,7 +84,9 @@ class MulticastUser extends Thread {
                         this.LoggedIn=true;
                     }
                     else{
-                            if(keyboardScanner.hasNextLine())  message = keyboardScanner.nextLine();
+                        System.out.printf("linha 87\n");
+                        message = keyboardScanner.nextLine();
+                        System.out.printf("linha 89\n"+ message);
                     }
                     if(message!=""){
                         byte[] buffer = message.getBytes();
@@ -106,7 +108,6 @@ class MulticastUser extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            keyboardScanner.close();
             socket.close();
         }
     }
@@ -120,7 +121,6 @@ class MulticastUser extends Thread {
         System.out.printf("Password:");
         password = input.nextLine();
         
-        input.close();
         return createLoginMessage(username, password);
     }
     public String createLoginMessage(String username, String password){

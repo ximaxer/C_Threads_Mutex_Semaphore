@@ -91,13 +91,14 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     }
     
     
-    public void CreateElection(Calendar dataI, Calendar dataF, String titulo, String descricao, String instituicao) throws ElectionAlreadyExistsException{
+    public String CreateElection(Calendar dataI, Calendar dataF, String titulo, String descricao, String instituicao) throws ElectionAlreadyExistsException{
         if(!checkElections(titulo, data.getElections())) {
             data.add(new Election(dataI, dataF, titulo, descricao, instituicao));
             data.updateRecords();
+            return "Eleicao adicionada com sucesso.";
         }
         else
-            throw new ElectionAlreadyExistsException("Election already exists!");
+            return "Eleicao ja existe!";
     }
 
     public boolean checkElections(String titulo,ArrayList<Election> elections){

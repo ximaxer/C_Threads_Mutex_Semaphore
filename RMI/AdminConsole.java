@@ -155,6 +155,11 @@ public class AdminConsole {
                         minuto=Integer.parseInt(time[1]);
                     }while((mes>12 || mes<1 )||(dia>31 || dia<1 )||(ano>2100 || ano<1980 )||(hora>23 || hora<0 )||(minuto>59 || minuto<0 ));
                     dataI.set(ano,mes,dia,hora,minuto);
+                    mes=13;
+                    dia=32;
+                    ano=0;
+                    hora=25;
+                    minuto=61;
                     System.out.printf("Data de Fim (mm/dd/aaaa;hh:mm): ");
                     do{
                         texto = reader.readLine();          //Data Final
@@ -169,7 +174,9 @@ public class AdminConsole {
                     }while((mes>12 || mes<1 )||(dia>31 || dia<1 )||(ano>2100 || ano<1980 )||(hora>23 || hora<0 )||(minuto>59 || minuto<0 ));
                     dataF.set(ano,mes,dia,hora,minuto);
                 }catch(Exception e){}
-                rmi.CreateElection(dataI, dataF, titulo, descricao, instituicao);
+                String b =rmi.CreateElection(dataI, dataF, titulo, descricao, instituicao);
+                System.out.println(b);
+
                 break;
             case "6":       //Associar lista a eleicao
             String lista="";
