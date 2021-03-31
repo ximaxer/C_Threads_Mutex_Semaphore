@@ -59,7 +59,6 @@ public class Data {
         readFile(DEFAULT_USERS_FILE, 1);
         readFile(DEFAULT_ADMINS_FILE, 2);
         readFile(DEFAULT_ELECTIONS_FILE, 3);
-        logoutEveryone();
 
         this.sessionFiles.put("users", DEFAULT_USERS_FILE);
         this.sessionFiles.put("admins", DEFAULT_ADMINS_FILE);
@@ -67,18 +66,11 @@ public class Data {
 
     }
 
-    private void logoutEveryone() throws Exception {
-        for (User user: this.users)
-            user.setLoggedIn(false);
-        for (Admin admin: this.admins)
-            admin.setLoggedIn(false);
-    }
 
     public synchronized void loadData(String userFileName, String adminFileName, String electionFileName) throws Exception{
         readFile(electionFileName, 3);
         readFile(adminFileName, 2);
         readFile(userFileName, 1);
-        logoutEveryone();
         this.sessionFiles.put("users", userFileName);
         this.sessionFiles.put("admins", adminFileName);
         this.sessionFiles.put("elections", electionFileName);

@@ -114,12 +114,36 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return false;
     }
 
-    public boolean checkIfCanVote(User user,Election election){
-        if(user.getInstituicao().compareTo(election.getInstituicao()) == 0 && checkElectionIsOngoing(election)){
+    public boolean checkIfCanVote(String username,String electionName) throws InvalidUsername{
+        User user = data.getUser(username);
+        Election election = data.getElection(electionName);
+        if(user.getInstituicao().compareTo(election.getInstituicao()) == 0 && checkElectionIsOngoing(election) && !VerifyIsUserAlreadyVoted(user,election)){
             return true;
         }
         return false;
-    } 
+    }
+
+    public boolean VerifyIsUserAlreadyVoted(User user,Election election) throws InvalidUsername{
+        for(User person: election.getListaCandidatosQueVotaram()){
+            if(person.getUsername().compareTo(user.getUsername()) == 0)
+                return true;
+        }
+        return false;
+    }
+
+    public String addVote(String username,String electionName,String listaPretendida) throws InvalidUsername{
+        if(checkIfCanVote(username,electionName)){
+            Election election = data.getElection(electionName);
+            for(Listas lista: data.getListas()){
+                if(lista.getName().compareTo(listaPretendida)==0){
+                    lista.incrementaVoto();
+                    election.getListaCandidatosQueVotaram().add(data.getUser(username));
+                    return "Obrigado por votar.\n";
+                }
+            }
+        }
+        return "Ja votou nesta eleicao!\n";
+    }
 
     public String addListaToElection(String listaNome, String electionName) throws RemoteException{
         if(!VerifyIfActiveElection(electionName))return "Eleicao nao existe!";
@@ -192,7 +216,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
                 if (!admin.checkPassword(password))
                     return "Incorrect Password!";
                 else{
-                    admin.setLoggedIn(true);
                     return username;
                 }
             }
@@ -206,7 +229,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
                 if (!user.checkPassword(password))
                     return "Incorrect Password!";
                 else{
-                    user.setLoggedIn(true);
                     return username;
                 }
             }

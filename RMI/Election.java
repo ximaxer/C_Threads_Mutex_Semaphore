@@ -26,7 +26,7 @@ public class Election implements Serializable {
         this.instituicao = instituicao;
         this.hasVoted = new ArrayList<>();
         this.listaMesas = new ArrayList<>();
-
+        this.listas = new ArrayList<>();
     
     }
     
