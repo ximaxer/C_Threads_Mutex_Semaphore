@@ -147,11 +147,11 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
                 if(lista.getName().compareTo(listaPretendida)==0){
                     lista.incrementaVoto();
                     election.getListaCandidatosQueVotaram().add(data.getUser(username));
-                    return "Obrigado por votar.\n";
+                    return "Obrigado por votar.";
                 }
             }
         }
-        return "Ja votou nesta eleicao!\n";
+        return "Ja votou nesta eleicao!";
     }
 
     public String ShowListsFromElection(String electionName) throws RemoteException{

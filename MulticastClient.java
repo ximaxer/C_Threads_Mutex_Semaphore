@@ -2,6 +2,7 @@ import java.net.MulticastSocket;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import RMI.CONST;
@@ -12,6 +13,16 @@ import java.util.TimerTask;
 // LISTENER
 public class MulticastClient extends Thread {
     public static boolean LogResult=false;
+    public static boolean hasIP=false;
+    public static boolean hasChosenElection = false;
+    public static boolean hasVoted = false;
+    public static String electionName="";
+
+
+    public String getElectionName(){
+        return this.electionName;
+    }
+
     public static void main(String[] args) {
         MulticastClient client = new MulticastClient();
         client.start();
@@ -33,11 +44,12 @@ public class MulticastClient extends Thread {
                 socket.receive(packet);
 
                 if(!myID.equals("")){       //terminal ja recebeu o ip
-                    
-                    
                     String message = new String(packet.getData(), 0, packet.getLength());
                     if(myID.equals(packet.getAddress().getHostAddress())){
                         System.out.println(packet.getAddress().getHostAddress() +"| "+message);
+		                HashMap<String, String> messageMap = parseMessage(message);
+                        updateState(messageMap); 
+
                     }
 
                 }else{                      //terminal ainda nao recebeu o ip
@@ -51,22 +63,49 @@ public class MulticastClient extends Thread {
             socket.close();
         }
     }
+    
+    private HashMap<String,String> parseMessage(String message){
+		try {
+			HashMap<String, String> messageMap = new HashMap<>();
+			for (String segment : message.split(";")) {
+				String[] keyValue = segment.split("\\|");
+				messageMap.put(keyValue[0], keyValue[1]);
+			}
+			return messageMap;
+		}catch (ArrayIndexOutOfBoundsException e){
+			return null;
+		}
+	}
+
+    private void updateState(HashMap<String, String> messageMap){
+        String a= this.getElectionName();
+        switch (messageMap.get("type")){    
+			case "status":
+                if(messageMap.get("logged").equals("on")){
+                    LogResult=true;
+                }else if(messageMap.get("logged").equals("off")){
+                    System.out.println("Erro no login tente novamente");
+                }
+            break;
+            case "Eleicao inexistente.\n":
+                hasChosenElection=false;
+            break;
+        }
+        if(this.getElectionName().equals(messageMap.get("type"))){
+            hasChosenElection=true;
+        }
+    }
 }
 
 // SENDER
 class MulticastUser extends Thread {
     String username="", password="",electionName="";
-    private boolean hasIP=false;
-    private boolean LoggedIn = false;
-    private boolean hasChosenElection = false;
-    private boolean hasVoted = false;
     public MulticastUser() {
         super("User " + (long) (1));
     }
 
     public void run() {
         new Acaba(60,0);        //diz que sai
-        LoggedIn = MulticastClient.LogResult;
         MulticastSocket socket = null;
         Scanner keyboardScanner = null;
         String message = "";
@@ -76,23 +115,21 @@ class MulticastUser extends Thread {
             while (true) {
                 socket = new MulticastSocket(CONST.MULTICAST.PORT);  // create socket without binding it (only for sending)
                 message = "";
-                if(this.hasIP){   
-                    if(!this.LoggedIn){
+                if(MulticastClient.hasIP){   
+                    if(!MulticastClient.LogResult){
                         try{
                             Thread.sleep(250);
                         }catch (InterruptedException  e) {
                             e.printStackTrace();
                         }
                         message = RequestLogin();
-                        this.LoggedIn=true;
-                    }else if(this.LoggedIn && !this.hasChosenElection){
+                    }else if(MulticastClient.LogResult && !MulticastClient.hasChosenElection){
                         this.electionName = keyboardScanner.nextLine();
                         message = ParseElectionChoice();
-                        this.hasChosenElection=true;
-                    }else if(this.LoggedIn && this.hasChosenElection && !this.hasVoted){
+                        MulticastClient.electionName = this.electionName;
+                    }else if(MulticastClient.LogResult && MulticastClient.hasChosenElection && !MulticastClient.hasVoted){
                         String vote = keyboardScanner.nextLine();
-                        message= ParseVoteChoice(vote);
-                        this.hasVoted=true;
+                        message = ParseVoteChoice(vote);
                     }
                     if(message!=""){
                         byte[] buffer = message.getBytes();
@@ -108,7 +145,7 @@ class MulticastUser extends Thread {
                         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
                         socket.send(packet);
                         message = "";
-                        this.hasIP=true;
+                        MulticastClient.hasIP=true;
                 }
             }
         } catch (IOException e) {
@@ -142,7 +179,6 @@ class MulticastUser extends Thread {
 }
 
 class Acaba {
-
     Timer timer;
 
     public Acaba(int seconds,int trigger) {
