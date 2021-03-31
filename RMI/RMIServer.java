@@ -224,7 +224,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     }
 
     public String evalCredentials(String username, String password) throws RemoteException,Exception {
-        // check if it is a user
+        if(data.getUser(username).getLoggedIn())return "User already voting";
         String validation="";
         validation=checkAdmins(username,password);
         if (validation.equals("Incorrect Password!")){

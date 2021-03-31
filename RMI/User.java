@@ -17,6 +17,7 @@ public class User implements Serializable {
     private Calendar valCC;
     private boolean voted;
     private String type;
+    private boolean isLoggedIn;
     
     public User(String username, String password, String instituicao, int telefone, String morada, int CC, Calendar valCC, boolean voted,String type) {
         this.username = username;
@@ -28,6 +29,7 @@ public class User implements Serializable {
         this.valCC = valCC;
         this.voted = voted;
         this.type = type;
+        this.isLoggedIn=false;
     }
 
     public boolean checkPassword(String other){
@@ -72,6 +74,14 @@ public class User implements Serializable {
 
     public String getType() {
         return this.type;
+    }
+
+    public boolean getLoggedIn(){
+        return this.isLoggedIn;
+    }
+
+    public void setLoggedIn(boolean a) {
+        this.isLoggedIn=a;
     }
     
     @Override
