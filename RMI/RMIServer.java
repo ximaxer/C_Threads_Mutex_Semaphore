@@ -53,20 +53,28 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     }
 
     public boolean checkPerson(String username){
-        return !(checkAdminExists(username, data.getAdmins()) | checkUserExists(username, data.getUsers()));
+        return !(checkAdminExists(username) | checkUserExists(username));
     }
 
-    public boolean checkAdminExists(String username,ArrayList<Admin> admins){
-        for(Admin admin: admins){
+    public boolean checkAdminExists(String username){
+        for(Admin admin: data.getAdmins()){
             if(admin.getUsername().compareTo(username) == 0)
                 return true;
         }
         return false;
     }
 
-    public boolean checkUserExists(String username,ArrayList<User> users){
-        for(User user: users){
+    public boolean checkUserExists(String username){
+        for(User user: data.getUsers()){
             if(user.getUsername().compareTo(username) == 0)
+                return true;
+        }
+        return false;
+    }
+
+    public boolean checkElectionExists(String electionName) throws RemoteException{
+        for(Election election: data.getElections()){
+            if(election.getTitulo().compareTo(electionName) == 0 && checkElectionIsOngoing(election))
                 return true;
         }
         return false;
@@ -101,7 +109,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
             return "Eleicao ja existe!";
     }
 
-    public boolean checkElections(String titulo,ArrayList<Election> elections){
+    public boolean checkElections(String titulo,ArrayList<Election> elections) {
         for(Election election: elections){
             if(election.getTitulo().compareTo(titulo) == 0)
                 return true;
@@ -118,13 +126,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     public boolean checkIfCanVote(String username,String electionName) throws InvalidUsername{
         User user = data.getUser(username);
         Election election = data.getElection(electionName);
-        if(user.getInstituicao().compareTo(election.getInstituicao()) == 0 && checkElectionIsOngoing(election) && !VerifyIsUserAlreadyVoted(user,election)){
+        if(user.getInstituicao().compareTo(election.getInstituicao()) == 0 && checkElectionIsOngoing(election) && !VerifyHasUserAlreadyVoted(user,election)){
             return true;
         }
         return false;
     }
 
-    public boolean VerifyIsUserAlreadyVoted(User user,Election election) throws InvalidUsername{
+    public boolean VerifyHasUserAlreadyVoted(User user,Election election) throws InvalidUsername{
         for(User person: election.getListaCandidatosQueVotaram()){
             if(person.getUsername().compareTo(user.getUsername()) == 0)
                 return true;
@@ -132,7 +140,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return false;
     }
 
-    public String addVote(String username,String electionName,String listaPretendida) throws InvalidUsername{
+    public String addVote(String username,String electionName,String listaPretendida) throws InvalidUsername, RemoteException{
         if(checkIfCanVote(username,electionName)){
             Election election = data.getElection(electionName);
             for(Listas lista: election.getListas()){
@@ -196,6 +204,19 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         
     }
     
+    public String formatListsMap(String electionName){
+        Election election = data.getElection(electionName);
+        int i=0;
+        String formatted ="item_count|";
+        String saving="";
+        for(Listas lista: election.getListas()){
+            saving+="item_"+i+"_name|"+lista.getName()+";";
+            i++;
+        }
+        formatted=formatted+i+";"+saving;
+        return formatted;
+    }
+
     public void removeTableFromElection(Table table, Election election) throws RemoteException{
         election.getListaMesas().remove(table);
     }

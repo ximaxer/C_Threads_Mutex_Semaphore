@@ -55,8 +55,11 @@ public class MulticastClient extends Thread {
 
 // SENDER
 class MulticastUser extends Thread {
+    String username="", password="",electionName="";
     private boolean hasIP=false;
     private boolean LoggedIn = false;
+    private boolean hasChosenElection = false;
+    private boolean hasVoted = false;
     public MulticastUser() {
         super("User " + (long) (1));
     }
@@ -82,11 +85,14 @@ class MulticastUser extends Thread {
                         }
                         message = RequestLogin();
                         this.LoggedIn=true;
-                    }
-                    else{
-                        System.out.printf("linha 87\n");
-                        message = keyboardScanner.nextLine();
-                        System.out.printf("linha 89\n"+ message);
+                    }else if(this.LoggedIn && !this.hasChosenElection){
+                        this.electionName = keyboardScanner.nextLine();
+                        message = ParseElectionChoice();
+                        this.hasChosenElection=true;
+                    }else if(this.LoggedIn && this.hasChosenElection && !this.hasVoted){
+                        String vote = keyboardScanner.nextLine();
+                        message= ParseVoteChoice(vote);
+                        this.hasVoted=true;
                     }
                     if(message!=""){
                         byte[] buffer = message.getBytes();
@@ -113,21 +119,26 @@ class MulticastUser extends Thread {
     }
 
     public String RequestLogin(){
-        String username="", password="";
         Scanner input = null;
         input = new Scanner(System.in);
         System.out.printf("\nUsername:");
-        username = input.nextLine();
+        this.username = input.nextLine();
         System.out.printf("Password:");
-        password = input.nextLine();
+        this.password = input.nextLine();
         
-        return createLoginMessage(username, password);
+        return createLoginMessage();
     }
-    public String createLoginMessage(String username, String password){
-        return "type|login;username|"+username+";password|"+password;
-    }    
+    public String createLoginMessage(){
+        return "type|login;username|"+this.username+";password|"+this.password;
+    }
+    
+    public String ParseElectionChoice(){
+        return "type|ElectionChoice;username|"+this.username+";password|"+this.password+";election|"+this.electionName;
+    }
 
-        //          type|login;username|abc;password|123
+    public String ParseVoteChoice(String lista){
+        return "type|Vote;username|"+this.username+";password|"+this.password+";election|"+this.electionName+";voto|"+lista;
+    }
 }
 
 class Acaba {

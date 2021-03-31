@@ -16,4 +16,7 @@ public interface RMIInterface extends Remote{
     String evalCredentials(String username, String password) throws RemoteException, Exception;
     String ShowActiveElections() throws RemoteException;
     long backupServer() throws RemoteException, UnknownHostException;
+    String formatListsMap(String electionName) throws RemoteException;
+    String addVote(String username, String electionName, String listaPretendida) throws InvalidUsername, RemoteException;
+    boolean checkElectionExists(String electionName) throws RemoteException;
 }

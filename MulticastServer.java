@@ -66,7 +66,7 @@ public class MulticastServer extends Thread{
 	String handle(String message) throws RemoteException, Exception {
 		HashMap<String, String> messageMap = parseMessage(message);
 		if (messageMap == null)	return null;
-		try { return createResponse(messageMap)+"\n"+ShowListas(rmi.ShowActiveElections()); }
+		try { return createResponse(messageMap); }
 		catch (InvalidRequestType e){ return null; }
 	}
 
@@ -91,11 +91,19 @@ public class MulticastServer extends Thread{
 		switch (messageMap.get("type")){    
 			case "login":
                 if(result.equals("Success!"))
-				return "type|status;logged|on;msg|Welcome to eVoting";
+				return "type|status;logged|on;msg|Welcome to eVoting\n"+ShowListas(rmi.ShowActiveElections());
                 else
-                return "type|status;logged|out;msg|"+result;
+                return "type|status;logged|out;msg|"+result+"\n";
+            case "ElectionChoice":
+                if(rmi.checkElectionExists(messageMap.get("election"))){
+                    return "type|"+messageMap.get("election")+";"+rmi.formatListsMap(messageMap.get("election"))+"\n";
+                }else{
+                    return "Eleicao inexistente.\n";
+                }
+            case "Vote": 
+                return rmi.addVote(messageMap.get("username"),messageMap.get("election"),messageMap.get("voto"))+"\n";
 			case "exit":
-				return "username|" + messageMap.get("id")+";type|status;" + "exited";
+				return "username|" + messageMap.get("id")+";type|status;" + "exited"+"\n";
 			default:
 				throw new InvalidRequestType("Unexpected value: " + messageMap.get("type"));
 		}
@@ -104,11 +112,11 @@ public class MulticastServer extends Thread{
 
     public String ShowListas(String lista){
         if (lista.equals("Nao existem eleicoes ativas.") || lista.equals("Nao existem listas nesta eleicao.") ){
-            return lista;
+            return lista+"\n";
         }
         for (String fragmento_lista : lista.split(";")) {
             lista=lista+"\n"+fragmento_lista;
         }
-        return lista;
+        return lista+"\n";
     }
 }
