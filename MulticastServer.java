@@ -103,7 +103,7 @@ public class MulticastServer extends Thread{
 
 
     public String ShowListas(String lista){
-        if (lista.equals("Nao existem eleicoes ativas")){
+        if (lista.equals("Nao existem eleicoes ativas.") || lista.equals("Nao existem listas nesta eleicao.") ){
             return lista;
         }
         for (String fragmento_lista : lista.split(";")) {

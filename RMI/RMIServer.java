@@ -77,7 +77,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         for(Election election: data.getElections()){
             if(checkElectionIsOngoing(election)) listaEleicoes+=election.getTitulo()+";";
         }
-        if(listaEleicoes.equals(""))return "Nao existem eleicoes ativas";
+        if(listaEleicoes.equals(""))return "Nao existem eleicoes ativas.";
         return listaEleicoes;
     }
 
@@ -145,7 +145,15 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return "Ja votou nesta eleicao!\n";
     }
 
-    //falta o show listas para ver as listas nas quais se pode votar
+    public String ShowListsFromElection(String electionName) throws RemoteException{
+        String listasDaEleicao="";
+        Election election = data.getElection(electionName);
+        for(Listas lista: election.getListas()){
+            listasDaEleicao+=lista.getName()+";";
+        }
+        if(listasDaEleicao.equals(""))return "Nao existem listas nesta eleicao.";
+        return listasDaEleicao;
+    }
 
 
     public String addListaToElection(String listaNome, String electionName) throws RemoteException{
