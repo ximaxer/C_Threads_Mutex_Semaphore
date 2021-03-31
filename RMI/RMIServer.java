@@ -134,7 +134,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     public String addVote(String username,String electionName,String listaPretendida) throws InvalidUsername{
         if(checkIfCanVote(username,electionName)){
             Election election = data.getElection(electionName);
-            for(Listas lista: data.getListas()){
+            for(Listas lista: election.getListas()){
                 if(lista.getName().compareTo(listaPretendida)==0){
                     lista.incrementaVoto();
                     election.getListaCandidatosQueVotaram().add(data.getUser(username));
@@ -144,6 +144,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         }
         return "Ja votou nesta eleicao!\n";
     }
+
+    //falta o show listas para ver as listas nas quais se pode votar
+
 
     public String addListaToElection(String listaNome, String electionName) throws RemoteException{
         if(!VerifyIfActiveElection(electionName))return "Eleicao nao existe!";
