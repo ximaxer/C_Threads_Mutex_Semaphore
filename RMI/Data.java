@@ -14,9 +14,11 @@ public class Data {
     private ArrayList<Listas> listas;
 
     private HashMap<String, String> sessionFiles;
-    private static String DEFAULT_USERS_FILE = "files/usersObjFile";
-    private static String DEFAULT_ADMINS_FILE = "files/adminsObjFile";
-    private static String DEFAULT_ELECTIONS_FILE = "files/electionsObjFile";
+    private static String USERS_FILE = "files/usersObjFile";
+    private static String ADMINS_FILE = "files/adminsObjFile";
+    private static String ELECTIONS_FILE = "files/electionsObjFile";
+    private static String TABLES_FILE = "files/tablesObjFile";
+    private static String LISTAS_FILE = "files/listasObjFile";
 
 
     public Data(){
@@ -56,24 +58,33 @@ public class Data {
     } 
 
     public synchronized void loadData() throws Exception{
-        readFile(DEFAULT_USERS_FILE, 1);
-        readFile(DEFAULT_ADMINS_FILE, 2);
-        readFile(DEFAULT_ELECTIONS_FILE, 3);
+        readFile(USERS_FILE, 1);
+        readFile(ADMINS_FILE, 2);
+        readFile(ELECTIONS_FILE, 3);
+        readFile(TABLES_FILE, 4);
+        readFile(LISTAS_FILE, 5);
 
-        this.sessionFiles.put("users", DEFAULT_USERS_FILE);
-        this.sessionFiles.put("admins", DEFAULT_ADMINS_FILE);
-        this.sessionFiles.put("elections", DEFAULT_ELECTIONS_FILE);
+        this.sessionFiles.put("users", USERS_FILE);
+        this.sessionFiles.put("admins", ADMINS_FILE);
+        this.sessionFiles.put("elections", ELECTIONS_FILE);
+        this.sessionFiles.put("tables", TABLES_FILE);
+        this.sessionFiles.put("listas", LISTAS_FILE);
 
     }
 
 
-    public synchronized void loadData(String userFileName, String adminFileName, String electionFileName) throws Exception{
-        readFile(electionFileName, 3);
-        readFile(adminFileName, 2);
+    public synchronized void loadData(String userFileName, String adminFileName, String electionFileName, String tablesFileName, String listasFileName) throws Exception{
         readFile(userFileName, 1);
+        readFile(adminFileName, 2);
+        readFile(electionFileName, 3);
+        readFile(tablesFileName, 4);
+        readFile(listasFileName, 5);
+        
         this.sessionFiles.put("users", userFileName);
         this.sessionFiles.put("admins", adminFileName);
         this.sessionFiles.put("elections", electionFileName);
+        this.sessionFiles.put("tables", tablesFileName);
+        this.sessionFiles.put("listas", listasFileName);
     }
 
     public ArrayList<User> getUsers() {
@@ -133,18 +144,24 @@ public class Data {
         writeFile(this.sessionFiles.get("users"), 1);
         writeFile(this.sessionFiles.get("admins"), 2);
         writeFile(this.sessionFiles.get("elections"), 3);
+        writeFile(this.sessionFiles.get("tables"), 4);
+        writeFile(this.sessionFiles.get("listas"), 5);
     }
 
-    public void createFiles(String userFileName, String adminFileName, String electionFileName){
+    public void createFiles(String userFileName, String adminFileName, String electionFileName, String tablesFileName, String listasFileName){
         writeFile(userFileName, 1);
         writeFile(adminFileName, 2);
         writeFile(electionFileName, 3);
+        writeFile(tablesFileName, 4);
+        writeFile(listasFileName, 5);
     }
 
     public void createFiles(){
-        writeFile(DEFAULT_USERS_FILE, 1);
-        writeFile(DEFAULT_ADMINS_FILE, 2);
-        writeFile(DEFAULT_ELECTIONS_FILE, 3);
+        writeFile(USERS_FILE, 1);
+        writeFile(ADMINS_FILE, 2);
+        writeFile(ELECTIONS_FILE, 3);
+        writeFile(TABLES_FILE, 4);
+        writeFile(LISTAS_FILE, 5);
     }
 
     private synchronized void readFile(String filename, int variableFlag){
@@ -161,6 +178,12 @@ public class Data {
                     break;
                 case 3:
                     this.elections = (ArrayList<Election>) objStream.readObject();
+                    break;
+                case 4:
+                    this.tables = (ArrayList<Table>) objStream.readObject();
+                    break;
+                case 5:
+                    this.listas = (ArrayList<Listas>) objStream.readObject();
                     break;
             }
             
@@ -193,6 +216,12 @@ public class Data {
                     break;
                 case 3:
                     objStream.writeObject(this.elections);
+                    break;
+                case 4:
+                    objStream.writeObject(this.tables);
+                    break;
+                case 5:
+                    objStream.writeObject(this.listas);
                     break;
                 
             }
