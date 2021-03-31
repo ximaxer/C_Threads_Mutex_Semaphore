@@ -25,6 +25,7 @@ public class AdminConsole {
         for (String fragmento_lista : lista.split(";")) {
             System.out.printf("\n"+fragmento_lista);
         }
+        System.out.printf("\n");
     }
 
 
@@ -108,7 +109,8 @@ public class AdminConsole {
                 break;
                 case "3":       //Associar mesa de voto
                 System.out.printf("Qual a eleicao a qual quer associar mesas?\n");
-                rmi.ShowActiveElections();
+                String eleicoes = rmi.ShowActiveElections();
+                ShowListas(eleicoes);
                 try{
                     eleicao = reader.readLine();
                 }catch(Exception e){}
@@ -121,7 +123,8 @@ public class AdminConsole {
                 break;
             case "4":       //Associar mesa de voto
                 System.out.printf("Qual a eleicao da qual quer desassociar mesas?\n");
-                rmi.ShowActiveElections();
+                eleicoes = rmi.ShowActiveElections();
+                ShowListas(eleicoes);
                 try{
                     eleicao = reader.readLine();
                 }catch(Exception e){}
@@ -146,13 +149,13 @@ public class AdminConsole {
                     do{
                         texto = reader.readLine();          //Data Inicial
                         String[] segment = texto.split(";");
-                        String[] data = segment[0].split("/");
-                        String[] time = segment[1].split(":");
-                        mes=Integer.parseInt(data[0]);
-                        dia=Integer.parseInt(data[1]);
-                        ano=Integer.parseInt(data[2]);
-                        hora=Integer.parseInt(time[0]);
-                        minuto=Integer.parseInt(time[1]);
+                        String[] dataIn = segment[0].split("/");
+                        String[] timeI = segment[1].split(":");
+                        mes=Integer.parseInt(dataIn[0]);
+                        dia=Integer.parseInt(dataIn[1]);
+                        ano=Integer.parseInt(dataIn[2]);
+                        hora=Integer.parseInt(timeI[0]);
+                        minuto=Integer.parseInt(timeI[1]);
                     }while((mes>12 || mes<1 )||(dia>31 || dia<1 )||(ano>2100 || ano<1980 )||(hora>23 || hora<0 )||(minuto>59 || minuto<0 ));
                     dataI.set(ano,mes,dia,hora,minuto);
                     mes=13;
@@ -164,17 +167,17 @@ public class AdminConsole {
                     do{
                         texto = reader.readLine();          //Data Final
                         String[] segment = texto.split(";");
-                        String[] data = segment[0].split("/");
-                        String[] time = segment[1].split(":");
-                        mes=Integer.parseInt(data[0]);
-                        dia=Integer.parseInt(data[1]);
-                        ano=Integer.parseInt(data[2]);
-                        hora=Integer.parseInt(time[0]);
-                        minuto=Integer.parseInt(time[1]);
+                        String[] dataFi = segment[0].split("/");
+                        String[] timeF = segment[1].split(":");
+                        mes=Integer.parseInt(dataFi[0]);
+                        dia=Integer.parseInt(dataFi[1]);
+                        ano=Integer.parseInt(dataFi[2]);
+                        hora=Integer.parseInt(timeF[0]);
+                        minuto=Integer.parseInt(timeF[1]);
                     }while((mes>12 || mes<1 )||(dia>31 || dia<1 )||(ano>2100 || ano<1980 )||(hora>23 || hora<0 )||(minuto>59 || minuto<0 ));
                     dataF.set(ano,mes,dia,hora,minuto);
                 }catch(Exception e){}
-                String b =rmi.CreateElection(dataI, dataF, titulo, descricao, instituicao);
+                String b = rmi.CreateElection(dataI, dataF, titulo, descricao, instituicao);
                 System.out.println(b);
 
                 break;
