@@ -130,6 +130,7 @@ class MulticastUser extends Thread {
                     }else if(MulticastClient.LogResult && MulticastClient.hasChosenElection && !MulticastClient.hasVoted){
                         String vote = keyboardScanner.nextLine();
                         message = ParseVoteChoice(vote);
+                        MulticastClient.hasVoted=true;
                     }
                     if(message!=""){
                         byte[] buffer = message.getBytes();
@@ -180,7 +181,6 @@ class MulticastUser extends Thread {
 
 class Acaba {
     Timer timer;
-
     public Acaba(int seconds,int trigger) {
         timer = new Timer();
         timer.schedule(new RemindTask(trigger), seconds * 1000);
