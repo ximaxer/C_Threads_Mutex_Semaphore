@@ -45,11 +45,11 @@ public class MulticastClient extends Thread {
 
                 if(!myID.equals("")){       //terminal ja recebeu o ip
                     String message = new String(packet.getData(), 0, packet.getLength());
-                    if(myID.equals(packet.getAddress().getHostAddress())){
-                        System.out.println(packet.getAddress().getHostAddress() +"| "+message);
+                    if(myID.equals(packet.getAddress().getHostAddress()) && message.charAt(0)!='-'){
+                        message=message.substring(0);
+                        System.out.println(packet.getAddress().getHostAddress() +"  |   "+message);
 		                HashMap<String, String> messageMap = parseMessage(message);
                         updateState(messageMap); 
-
                     }
 
                 }else{                      //terminal ainda nao recebeu o ip
@@ -73,26 +73,30 @@ public class MulticastClient extends Thread {
 			}
 			return messageMap;
 		}catch (ArrayIndexOutOfBoundsException e){
+            System.out.println("stonks");
 			return null;
 		}
 	}
 
     private void updateState(HashMap<String, String> messageMap){
         String a= this.getElectionName();
-        switch (messageMap.get("type")){    
-			case "status":
-                if(messageMap.get("logged").equals("on")){
-                    LogResult=true;
-                }else if(messageMap.get("logged").equals("off")){
-                    System.out.println("Erro no login tente novamente");
-                }
-            break;
-            case "Eleicao inexistente.\n":
-                hasChosenElection=false;
-            break;
-        }
-        if(this.getElectionName().equals(messageMap.get("type"))){
-            hasChosenElection=true;
+        if(messageMap!=null){
+            switch (messageMap.get("type")){    
+                case "status":
+                    if(messageMap.get("logged").equals("on")){
+                        MulticastClient.LogResult=true;
+                    }else if(messageMap.get("logged").equals("off")){
+                        System.out.println("Erro no login tente novamente");
+                    }
+                break;
+                case "Eleicao inexistente.\n":
+                MulticastClient.hasChosenElection=false;
+                break;
+            }
+            if(this.getElectionName().equals(messageMap.get("type"))){
+                System.out.println("hello");
+                MulticastClient.hasChosenElection=true;
+            }
         }
     }
 }
@@ -115,6 +119,7 @@ class MulticastUser extends Thread {
             while (true) {
                 socket = new MulticastSocket(CONST.MULTICAST.PORT);  // create socket without binding it (only for sending)
                 message = "";
+                Thread.sleep(100);
                 if(MulticastClient.hasIP){   
                     if(!MulticastClient.LogResult){
                         try{
@@ -123,16 +128,17 @@ class MulticastUser extends Thread {
                             e.printStackTrace();
                         }
                         message = RequestLogin();
-                    }else if(MulticastClient.LogResult && !MulticastClient.hasChosenElection){
-                        this.electionName = keyboardScanner.nextLine();
-                        message = ParseElectionChoice();
-                        MulticastClient.electionName = this.electionName;
                     }else if(MulticastClient.LogResult && MulticastClient.hasChosenElection && !MulticastClient.hasVoted){
                         String vote = keyboardScanner.nextLine();
                         message = ParseVoteChoice(vote);
                         MulticastClient.hasVoted=true;
+                    }else if(MulticastClient.LogResult && !MulticastClient.hasChosenElection){
+                        this.electionName = keyboardScanner.nextLine();
+                        MulticastClient.electionName = this.electionName;
+                        message = ParseElectionChoice();
                     }
                     if(message!=""){
+                        message="-"+message;
                         byte[] buffer = message.getBytes();
                         InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
                         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
@@ -151,6 +157,9 @@ class MulticastUser extends Thread {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
         } finally {
             socket.close();
         }

@@ -34,6 +34,7 @@ public class MulticastServer extends Thread{
         try{
             InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
             while (true){
+                Thread.sleep(50);
                 socket = new MulticastSocket(CONST.MULTICAST.PORT);
                 socket.joinGroup(group);
                 byte[] buffer = new byte[BUFFER_SIZE];
@@ -41,6 +42,7 @@ public class MulticastServer extends Thread{
                 System.out.println("waiting.");
                 socket.receive(packet);
                 String message = new String(packet.getData(), 0, packet.getLength());
+                message=message.substring(1);
                 System.out.println(packet.getAddress()+"|"+message); //DEBUG
 
                 String response = this.handle(message);
@@ -91,7 +93,7 @@ public class MulticastServer extends Thread{
 		switch (messageMap.get("type")){    
 			case "login":
                 if(result.equals("Success!"))
-				return "type|status;logged|on;msg|Welcome to eVoting\n"+ShowListas(rmi.ShowActiveElections());
+				return "type|status;logged|on;msg|Welcome to eVoting"+ShowListas(rmi.ShowActiveElections());
                 else
                 return "type|status;logged|out;msg|"+result+"\n";
             case "ElectionChoice":
@@ -111,12 +113,13 @@ public class MulticastServer extends Thread{
 
 
     public String ShowListas(String lista){
+        String finalList="";
         if (lista.equals("Nao existem eleicoes ativas.") || lista.equals("Nao existem listas nesta eleicao.") ){
             return lista+"\n";
         }
         for (String fragmento_lista : lista.split(";")) {
-            lista=lista+"\n"+fragmento_lista;
+            finalList=finalList+"\n"+fragmento_lista;
         }
-        return lista+"\n";
+        return finalList+"\n";
     }
 }

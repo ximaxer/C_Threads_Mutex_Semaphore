@@ -215,7 +215,12 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
             saving+="item_"+i+"_name|"+lista.getName()+";";
             i++;
         }
-        formatted=formatted+i+";"+saving;
+        if(saving.length()!=0){
+            saving=saving.substring(0, saving.length()-1);
+            formatted=formatted+i+";"+saving;
+        }else{
+            formatted=formatted+i;
+        }
         return formatted;
     }
 
