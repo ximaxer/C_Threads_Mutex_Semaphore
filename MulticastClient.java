@@ -94,7 +94,6 @@ public class MulticastClient extends Thread {
                 break;
             }
             if(this.getElectionName().equals(messageMap.get("type"))){
-                System.out.println("hello");
                 MulticastClient.hasChosenElection=true;
             }
         }
@@ -121,6 +120,7 @@ class MulticastUser extends Thread {
                 message = "";
                 Thread.sleep(100);
                 if(MulticastClient.hasIP){   
+                    System.out.println(MulticastClient.hasChosenElection);
                     if(!MulticastClient.LogResult){
                         try{
                             Thread.sleep(250);
