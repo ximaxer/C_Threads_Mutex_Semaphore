@@ -13,10 +13,12 @@ import java.util.TimerTask;
 // LISTENER
 public class MulticastClient extends Thread {
     public static boolean LogResult=false;
+    public static boolean isBlocked=true;
     public static boolean hasIP=false;
     public static boolean hasChosenElection = false;
     public static boolean hasVoted = false;
     public static String electionName="";
+    public static String myID="";
 
 
     public String getElectionName(){
@@ -32,7 +34,6 @@ public class MulticastClient extends Thread {
 
     public void run() {
         new Acaba(60,1);        //nao diz que sai
-        String myID="";
         MulticastSocket socket = null;
         try {
             socket = new MulticastSocket(CONST.MULTICAST.PORT);  // create socket and bind it
@@ -42,14 +43,19 @@ public class MulticastClient extends Thread {
                 byte[] buffer = new byte[3*1024];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 socket.receive(packet);
-
+                String message = new String(packet.getData(), 0, packet.getLength());
                 if(!myID.equals("")){       //terminal ja recebeu o ip
-                    String message = new String(packet.getData(), 0, packet.getLength());
                     if(myID.equals(packet.getAddress().getHostAddress()) && message.charAt(0)!='-'){
                         message=message.substring(0);
-                        System.out.println(packet.getAddress().getHostAddress() +"  |   "+message);
-		                HashMap<String, String> messageMap = parseMessage(message);
-                        updateState(messageMap); 
+                        if(!isBlocked){
+                            HashMap<String, String> messageMap = parseMessage(message);
+                            System.out.println(packet.getAddress().getHostAddress() +"  |   "+message);
+                            updateState(messageMap);
+                        } 
+                        if(unblocker(message)){
+                            isBlocked=false;
+                            System.out.println("Terminal desbloqueado.");
+                        }
                     }
 
                 }else{                      //terminal ainda nao recebeu o ip
@@ -73,10 +79,15 @@ public class MulticastClient extends Thread {
 			}
 			return messageMap;
 		}catch (ArrayIndexOutOfBoundsException e){
-            System.out.println("stonks");
 			return null;
 		}
 	}
+
+    private boolean unblocker(String value){
+        String[] keyValue = value.split("\\|");
+        if(keyValue[0].equals(myID) && keyValue[1].equals("unblocked"))return true;
+        else return false;
+    }
 
     private void updateState(HashMap<String, String> messageMap){
         String a= this.getElectionName();
@@ -102,51 +113,61 @@ public class MulticastClient extends Thread {
 
 // SENDER
 class MulticastUser extends Thread {
-    String username="", password="",electionName="";
+    String username="", password="", electionName="";
     public MulticastUser() {
         super("User " + (long) (1));
     }
 
     public void run() {
+        boolean sai=false;
         new Acaba(60,0);        //diz que sai
         MulticastSocket socket = null;
         Scanner keyboardScanner = null;
         String message = "";
         keyboardScanner = new Scanner(System.in);
         System.out.print(this.getName() + " ready, ");
+        sai=false;
         try {
             while (true) {
                 socket = new MulticastSocket(CONST.MULTICAST.PORT);  // create socket without binding it (only for sending)
                 message = "";
-                Thread.sleep(100);
-                if(MulticastClient.hasIP){   
-                    System.out.println(MulticastClient.hasChosenElection);
-                    if(!MulticastClient.LogResult){
-                        try{
-                            Thread.sleep(250);
-                        }catch (InterruptedException  e) {
-                            e.printStackTrace();
+                Thread.sleep(200);
+                //System.out.println(MulticastClient.hasIP + "    I   " + MulticastClient.isBlocked);
+                if(MulticastClient.hasIP){
+                    if(!MulticastClient.isBlocked){
+                        if(!MulticastClient.LogResult){
+                            try{
+                                Thread.sleep(250);
+                            }catch (InterruptedException  e) {
+                                e.printStackTrace();
+                            }
+                            message = RequestLogin();
+                        }else if(MulticastClient.LogResult && MulticastClient.hasChosenElection && !MulticastClient.hasVoted){
+                            System.out.println("Qual a lista em que deseja votar?");
+                            String vote = keyboardScanner.nextLine();
+                            message = ParseVoteChoice(vote);
+                            MulticastClient.hasVoted=true;
+                        }else if(MulticastClient.LogResult && !MulticastClient.hasChosenElection){
+                            System.out.println("Qual a eleicao na qual deseja votar?");
+                            this.electionName = keyboardScanner.nextLine();
+                            MulticastClient.electionName = this.electionName;
+                            message = ParseElectionChoice();
+                        }else if(MulticastClient.LogResult && MulticastClient.hasChosenElection && MulticastClient.hasVoted){
+                            MulticastClient.isBlocked=true;
+                            message="type|block;terminal|"+MulticastClient.myID+";username|"+this.username+";password|"+this.password;
                         }
-                        message = RequestLogin();
-                    }else if(MulticastClient.LogResult && MulticastClient.hasChosenElection && !MulticastClient.hasVoted){
-                        String vote = keyboardScanner.nextLine();
-                        message = ParseVoteChoice(vote);
-                        MulticastClient.hasVoted=true;
-                    }else if(MulticastClient.LogResult && !MulticastClient.hasChosenElection){
-                        this.electionName = keyboardScanner.nextLine();
-                        MulticastClient.electionName = this.electionName;
-                        message = ParseElectionChoice();
-                    }
-                    if(message!=""){
-                        message="-"+message;
-                        byte[] buffer = message.getBytes();
-                        InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
-                        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
-                        socket.send(packet);
-                        message = "";
+                        if(message!=""){
+                            message="-"+message;
+                            byte[] buffer = message.getBytes();
+                            InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
+                            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
+                            socket.send(packet);
+                            message = "";
+                        }
+                        
                     }
                 }else{
-                        message = "give my my ip";
+                        message = "-give my my ip";
                         byte[] buffer = message.getBytes();
                         InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
                         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);

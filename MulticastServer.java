@@ -11,14 +11,23 @@ import javax.lang.model.util.ElementScanner6;
 
 public class MulticastServer extends Thread{
 
-    private static int BUFFER_SIZE = 256;
+    public static int BUFFER_SIZE = 256;
     private String serverID;
-    private static RMIInterface rmi;
+    public static RMIInterface rmi;
+    public static boolean NeedNewTerm=false;
+    public static HashMap<String, String> listaTerminais= new HashMap<String, String>();
+    public static boolean waitingForTerminal=true;
+    public static String newTerm="";
 
     public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException{
         
         rmi = (RMIInterface) Naming.lookup("server");
         System.out.println("SERVER Initializing...");
+        System.out.println("Multicast Server running...");
+        MulticastServer2 inputter = new MulticastServer2();
+        inputter.start();
+        gestaoTerminais gestor = new gestaoTerminais();
+        gestor.start();
         MulticastServer server = new MulticastServer();
         server.start();
     }
@@ -29,29 +38,34 @@ public class MulticastServer extends Thread{
     }
 
     public void run(){
+        boolean listen=true;
         MulticastSocket socket = null;
-        System.out.println("Multicast Server running...");
         try{
             InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
             while (true){
-                Thread.sleep(50);
-                socket = new MulticastSocket(CONST.MULTICAST.PORT);
-                socket.joinGroup(group);
-                byte[] buffer = new byte[BUFFER_SIZE];
-                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-                System.out.println("waiting.");
-                socket.receive(packet);
-                String message = new String(packet.getData(), 0, packet.getLength());
-                message=message.substring(1);
-                System.out.println(packet.getAddress()+"|"+message); //DEBUG
-
-                String response = this.handle(message);
-                if (response != null) {
-                    System.out.println("SENDING RESPONSE: "+ response + "to "+packet.getAddress()); //DEBUG
-                    buffer = response.getBytes();
-                    packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
-                    socket = new MulticastSocket();
-                    socket.send(packet);
+                    newTerm="Nao ha terminais disponiveis.";
+                    Thread.sleep(50);
+                    socket = new MulticastSocket(CONST.MULTICAST.PORT);
+                    socket.joinGroup(group);
+                    byte[] buffer = new byte[BUFFER_SIZE];
+                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                    System.out.println("waiting.");
+                    socket.receive(packet);
+                    String message = new String(packet.getData(), 0, packet.getLength());
+                    message=message.substring(1);
+                    System.out.println(packet.getAddress()+"|"+message);
+                    if(message.equals("give my my ip") || message.equals("blocked")){
+                        listaTerminais.put(packet.getAddress().toString().substring(1), "blocked");
+                    }
+                if(!waitingForTerminal){ //DEBUG
+                    String response = this.handle(message);
+                    if (response != null) {
+                        System.out.println("SENDING RESPONSE: "+ response + "to "+packet.getAddress()); //DEBUG
+                        buffer = response.getBytes();
+                        packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
+                        socket = new MulticastSocket();
+                        socket.send(packet);
+                    }
                 }
             }
         }catch (IOException e) {
@@ -84,10 +98,8 @@ public class MulticastServer extends Thread{
 			return null;
 		}
 	}
-
-
-
 	private String createResponse(HashMap<String, String> messageMap) throws InvalidRequestType, RemoteException, Exception{
+        //System.out.println("#####"+ messageMap.get("username")+"######"+messageMap.get("password"));
         String result= rmi.evalCredentials(messageMap.get("username"),messageMap.get("password"));
         //String result ="Success!";
 		switch (messageMap.get("type")){    
@@ -104,13 +116,23 @@ public class MulticastServer extends Thread{
                 }
             case "Vote": 
                 return rmi.addVote(messageMap.get("username"),messageMap.get("election"),messageMap.get("voto"))+"\n";
-			case "exit":
-				return "username|" + messageMap.get("id")+";type|status;" + "exited"+"\n";
+			case "block":
+                lockTerminal(messageMap.get("terminal"));
+				return "type|block;terminal|" + messageMap.get("terminal")+"\n";
 			default:
 				throw new InvalidRequestType("Unexpected value: " + messageMap.get("type"));
 		}
 	}
 
+
+    public void lockTerminal(String terminal){
+        for (String key : listaTerminais.keySet()) {
+            if(key.toString().equals(terminal)){
+                listaTerminais.put(key,"blocked");
+                MulticastServer.NeedNewTerm=false;
+            }
+        }
+    }
 
     public String ShowListas(String lista){
         String finalList="";
@@ -122,4 +144,100 @@ public class MulticastServer extends Thread{
         }
         return finalList+"\n";
     }
+}
+
+class MulticastServer2 extends Thread{
+    public static String CCs="";
+    public MulticastServer2() {
+        super("Server " + (long) (1));
+    }
+    public void run() {
+        Scanner input = null;
+        input = new Scanner(System.in);
+        while(true){
+            if(MulticastServer.listaTerminais!=null){
+                System.out.printf("Identifique-se: ");
+                String nrCC = input.nextLine();
+                if(!nrCC.equals("") && verifyCC(nrCC,CCs)){
+                    CCs+=nrCC+";";
+                    if (CCs.length()!=0){
+                        if(CCs.valueOf(CCs.length()-1).equals(";"))CCs=CCs.substring(0, CCs.length()-1);;
+                    }
+                    MulticastServer.NeedNewTerm=true;
+                }
+                nrCC="";
+            }
+        }
+    }
+
+    public boolean verifyCC(String CC, String CCs){
+        for (String nrCC : CCs.split(";")) {
+            if(nrCC.equals(CC))return false;
+        }
+        return true;
+    }
+}
+
+class gestaoTerminais extends Thread{
+    public static String CCs="";
+    public gestaoTerminais() {
+        super("Server " + (long) (1));
+    }
+    public void run() {
+        MulticastSocket socket = null;
+        try{
+            InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
+            while (true){
+                if(isEveryTermBlocked(MulticastServer.listaTerminais))MulticastServer.waitingForTerminal=true;
+                socket = new MulticastSocket(CONST.MULTICAST.PORT);
+                socket.joinGroup(group);
+                byte[] buffer = new byte[MulticastServer.BUFFER_SIZE];
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                String message = new String(packet.getData(), 0, packet.getLength());
+                if(MulticastServer.NeedNewTerm){
+                    MulticastServer.newTerm = unlockTerminals(MulticastServer.listaTerminais);
+                    if(!MulticastServer.newTerm.equals("Nao ha terminais disponiveis.")){
+                        String response = "unblocked";
+                        System.out.println("Terminal with IP:"+MulticastServer.newTerm+" "+response);
+                        response=MulticastServer.newTerm+"|"+response;
+                        buffer = response.getBytes();
+                        packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
+                        socket = new MulticastSocket();
+                        socket.send(packet);
+                        MulticastServer.NeedNewTerm=false;
+                        MulticastServer.waitingForTerminal=false;
+                    }
+                }
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
+            assert socket != null;
+            socket.close();
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }    
+    }
+
+    private boolean isEveryTermBlocked(HashMap<String, String> terminais){
+        for (String key : terminais.keySet()) {
+            if(terminais.get(key).equals("unblocked")){
+                return false;
+            }
+        }  
+        return true;
+    }
+
+    private String unlockTerminals(HashMap<String, String> terminais){
+        for (String key : terminais.keySet()) {
+            if(terminais.get(key).equals("blocked")){
+                terminais.put(key,"unblocked");
+                MulticastServer.NeedNewTerm=false;
+                return key;         //ip do terminal desbloqueado
+            }
+        }
+        return "Nao ha terminais disponiveis.";
+    }
+
 }
