@@ -52,7 +52,7 @@ public class AdminConsole {
         String eleicao = "";
         String result = "";
         
-        System.out.printf("1 - Registar Pessoas\n2 - Criar mesa de voto\n3 - Associar mesa de voto\n4 - Desassociar mesa de voto\n5 - Criar eleicao\n6 - Adicionar lista a eleicao\n");
+        System.out.printf("1 - Registar Pessoas\n2 - Criar mesa de voto\n3 - Associar mesa de voto\n4 - Desassociar mesa de voto\n5 - Criar eleicao\n6 - Adicionar lista a eleicao\n7 - Mostrar local no qual votou cada eleitor");
         try{
             texto = reader.readLine();
         }catch(Exception e){}
@@ -195,6 +195,17 @@ public class AdminConsole {
             }catch(Exception e){}
                 result= rmi.addListaToElection(texto, eleicao);
                 System.out.printf("%s\n",result);
+            break;
+            case "7":
+                String listaDeVotos="";
+                System.out.printf("Qual a eleicao que quer saber onde cada pessoa votou?\n");
+                lista = rmi.ShowActiveElections();
+                ShowListas(lista);
+                try{
+                    eleicao = reader.readLine();
+                }catch(Exception e){}
+                listaDeVotos=rmi.showWhereVoted(eleicao);
+                System.out.printf("%s\n",listaDeVotos);
             break;
         }
     }

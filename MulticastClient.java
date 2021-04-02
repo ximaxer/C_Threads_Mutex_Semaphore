@@ -33,7 +33,6 @@ public class MulticastClient extends Thread {
     }
 
     public void run() {
-        new Acaba(60,1);        //nao diz que sai
         MulticastSocket socket = null;
         try {
             socket = new MulticastSocket(CONST.MULTICAST.PORT);  // create socket and bind it
@@ -120,7 +119,6 @@ class MulticastUser extends Thread {
 
     public void run() {
         boolean sai=false;
-        new Acaba(60,0);        //diz que sai
         MulticastSocket socket = null;
         Scanner keyboardScanner = null;
         String message = "";
@@ -190,6 +188,7 @@ class MulticastUser extends Thread {
     }
 
     public String RequestLogin(){
+        new Acaba(60,0);        //diz que sai
         Scanner input = null;
         input = new Scanner(System.in);
         System.out.printf("\nUsername:");
@@ -213,7 +212,7 @@ class MulticastUser extends Thread {
 }
 
 class Acaba {
-    Timer timer;
+    public static Timer timer;
     public Acaba(int seconds,int trigger) {
         timer = new Timer();
         timer.schedule(new RemindTask(trigger), seconds * 1000);
@@ -225,8 +224,26 @@ class Acaba {
             this.tipo = trigger;
         }
         public void run() {
-            if(tipo == 0)System.out.printf("\nProgram terminating!");
-            System.exit(0);
+            MulticastSocket socket = null;
+            try {
+                socket = new MulticastSocket(CONST.MULTICAST.PORT);
+                MulticastClient.isBlocked=true;
+                MulticastClient.LogResult=false;
+                MulticastClient.hasChosenElection=false;;
+                MulticastClient.hasVoted=false;
+                String message="-type|block;terminal|"+MulticastClient.myID;
+                byte[] buffer = message.getBytes();
+                InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
+                socket.send(packet);
+                message = "";
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }finally{
+                socket.close();
+            }
+            System.out.println("60 seconds are up. Blocking terminal");
             timer.cancel(); //Terminate the timer thread
         }
     }

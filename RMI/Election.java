@@ -61,4 +61,12 @@ public class Election implements Serializable {
     public ArrayList<Listas> getListas() {
         return listas;
     }
+
+    public String showWherePeopleVoted(){
+        String info="";
+        for(User user: this.getListaCandidatosQueVotaram()){
+            info+=user.getUsername()+ " - " +user.getInstituicao()+"\n";
+        }
+        return info;
+    }
 }

@@ -57,7 +57,7 @@ public class MulticastServer extends Thread{
                     if(message.equals("give my my ip")){
                         listaTerminais.put(packet.getAddress().toString().substring(1), "blocked");
                     }
-                if(!waitingForTerminal){ //DEBUG
+                if(!waitingForTerminal && !message.equals("")){ //DEBUG
                     String response = this.handle(message);
                     if (response != null) {
                         System.out.println("SENDING RESPONSE: "+ response + "to "+packet.getAddress()); //DEBUG
@@ -100,10 +100,10 @@ public class MulticastServer extends Thread{
 	}
 	private String createResponse(HashMap<String, String> messageMap) throws InvalidRequestType, RemoteException, Exception{
         //System.out.println("#####"+ messageMap.get("username")+"######"+messageMap.get("password"));
-        String result= rmi.evalCredentials(messageMap.get("username"),messageMap.get("password"));
         //String result ="Success!";
 		switch (messageMap.get("type")){    
 			case "login":
+            String result= rmi.evalCredentials(messageMap.get("username"),messageMap.get("password"));
                 if(result.equals("Success!"))
 				return "type|status;logged|on;msg|Welcome to eVoting"+ShowListas(rmi.ShowActiveElections());
                 else

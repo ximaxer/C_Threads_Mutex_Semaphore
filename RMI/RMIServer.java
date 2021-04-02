@@ -22,7 +22,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     protected RMIServer() throws RemoteException {
         super();
         this.data = new Data();
-        //data.createFiles();
+        data.createFiles();
         try{
             data.loadData();
         }catch (Exception e){}
@@ -98,7 +98,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return false;
     }
     
-    
+    public String showWhereVoted(String electionName) throws RemoteException{
+        String listaDeVotosELocais="";
+        if(checkElectionExists(electionName))return "Eleicao inexistente";
+        Election election=data.getElection(electionName);
+        listaDeVotosELocais = election.showWherePeopleVoted();
+        return listaDeVotosELocais;
+    }
     public String CreateElection(Calendar dataI, Calendar dataF, String titulo, String descricao, String instituicao) throws ElectionAlreadyExistsException{
         if(!checkElections(titulo, data.getElections())) {
             data.add(new Election(dataI, dataF, titulo, descricao, instituicao));

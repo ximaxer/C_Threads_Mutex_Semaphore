@@ -19,4 +19,5 @@ public interface RMIInterface extends Remote{
     String formatListsMap(String electionName) throws RemoteException;
     String addVote(String username, String electionName, String listaPretendida) throws InvalidUsername, RemoteException;
     boolean checkElectionExists(String electionName) throws RemoteException;
+    String showWhereVoted(String electionName) throws RemoteException;
 }
