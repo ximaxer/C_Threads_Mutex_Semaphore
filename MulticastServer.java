@@ -54,7 +54,7 @@ public class MulticastServer extends Thread{
                     String message = new String(packet.getData(), 0, packet.getLength());
                     message=message.substring(1);
                     System.out.println(packet.getAddress()+"|"+message);
-                    if(message.equals("give my my ip") || message.equals("blocked")){
+                    if(message.equals("give my my ip")){
                         listaTerminais.put(packet.getAddress().toString().substring(1), "blocked");
                     }
                 if(!waitingForTerminal){ //DEBUG

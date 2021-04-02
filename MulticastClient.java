@@ -154,6 +154,9 @@ class MulticastUser extends Thread {
                             message = ParseElectionChoice();
                         }else if(MulticastClient.LogResult && MulticastClient.hasChosenElection && MulticastClient.hasVoted){
                             MulticastClient.isBlocked=true;
+                            MulticastClient.LogResult=false;
+                            MulticastClient.hasChosenElection=false;;
+                            MulticastClient.hasVoted=false;
                             message="type|block;terminal|"+MulticastClient.myID+";username|"+this.username+";password|"+this.password;
                         }
                         if(message!=""){
