@@ -22,7 +22,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     protected RMIServer() throws RemoteException {
         super();
         this.data = new Data();
-        data.createFiles();
+        //data.createFiles();
         try{
             data.loadData();
         }catch (Exception e){}
@@ -89,10 +89,40 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return listaEleicoes;
     }
 
+    public String ShowUnstartedElections() throws RemoteException{
+        String listaEleicoes="";
+        for(Election election: data.getElections()){
+            if(checkElectionIsUnstarted(election)) listaEleicoes+=election.getTitulo()+";";
+        }
+        if(listaEleicoes.equals(""))return "Nao existem eleicoes nao ativas.";
+        return listaEleicoes;
+    }
+
+    public boolean checkElectionIsUnstarted(Election election){
+        Calendar currentDate = Calendar.getInstance();
+        if(election.getDataI().compareTo(currentDate) == 1) return true;
+        return false;
+    }
+
+    public boolean checkElectionIsFinished(Election election){
+        Calendar currentDate = Calendar.getInstance();
+        if(election.getDataF().compareTo(currentDate) == -1) return true;
+        return false;
+    }
+
     public boolean VerifyIfActiveElection(String nome) throws RemoteException{
         for(Election election: data.getElections()){
             if(election.getTitulo().compareTo(nome)==0){
                 if(checkElectionIsOngoing(election)) return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean VerifyIfUnactiveElection(String nome) throws RemoteException{
+        for(Election election: data.getElections()){
+            if(election.getTitulo().compareTo(nome)==0){
+                if(checkElectionIsUnstarted(election)) return true;
             }
         }
         return false;
@@ -282,10 +312,55 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return "";
     }
 
+    public String editElection1(String change, String property,String electionName) throws RemoteException{
+        if(!VerifyIfUnactiveElection(electionName)) return "Eleicao nao existe/nao pode ser editada";
+        for(Election election: data.getElections()){
+            if(election.getTitulo().compareTo(electionName)==0){
+                if(property.compareTo("titulo")==0){
+                    election.setTitulo(change);
+                    data.updateRecords();
+                    return "Titulo mudado com sucesso!";
+                }
+                else if(property.compareTo("descricao")==0){
+                    election.setDescricao(change);
+                    data.updateRecords();
+                    return "Descricao mudada com sucesso!";
+                }
+                else if(property.compareTo("instituicao")==0){
+                    election.setInstituicao(change);
+                    data.updateRecords();
+                    return "Instituicao mudada com sucesso!";
+                }
+            }
+            
+        }
+        return "Eleicao nao foi editada.";
+    }
+
+    public String editElection2(Calendar change, String property,String electionName) throws RemoteException{
+        if(!VerifyIfUnactiveElection(electionName)) return "Eleicao nao existe/nao pode ser editada";
+        for(Election election: data.getElections()){
+            if(election.getTitulo().compareTo(electionName)==0){
+                if(property.compareTo("dataI")==0){
+                    election.setDataI(change);
+                    data.updateRecords();
+                    return "Data inicial mudada com sucesso!";
+                }
+                else if(property.compareTo("dataF")==0){
+                    election.setDataF(change);
+                    data.updateRecords();
+                    return "Data final mudada com sucesso!";
+                }
+            }
+        }
+        return "Eleicao nao foi editada.";
+    }
 
     public long backupServer(){
         return ProcessHandle.current().pid();
     }
+
+    
 
     public static void main(String[] args) throws AccessException, RemoteException, NotBoundException, MalformedURLException{
         //System.getProperties().put("java.security.policy", "policy.all");

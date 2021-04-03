@@ -56,6 +56,7 @@ public class Data {
         this.listas.add(lista);
     } 
 
+
     public synchronized void loadData() throws Exception{
         readFile(USERS_FILE, 1);
         readFile(ADMINS_FILE, 2);

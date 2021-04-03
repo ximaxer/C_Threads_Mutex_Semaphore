@@ -51,8 +51,9 @@ public class AdminConsole {
         String descricao = "";
         String eleicao = "";
         String result = "";
-        
-        System.out.printf("1 - Registar Pessoas\n2 - Criar mesa de voto\n3 - Associar mesa de voto\n4 - Desassociar mesa de voto\n5 - Criar eleicao\n6 - Adicionar lista a eleicao\n7 - Mostrar local no qual votou cada eleitor");
+        String altString = "";
+        Calendar  altCalendar = Calendar.getInstance();
+        System.out.printf("1 - Registar Pessoas\n2 - Criar mesa de voto\n3 - Associar mesa de voto\n4 - Desassociar mesa de voto\n5 - Criar eleicao\n6 - Adicionar lista a eleicao\n7 - Mostrar local no qual votou cada eleitor\n8 - Editar eleicao\n");
         try{
             texto = reader.readLine();
         }catch(Exception e){}
@@ -207,6 +208,43 @@ public class AdminConsole {
                 listaDeVotos=rmi.showWhereVoted(eleicao);
                 System.out.printf("%s\n",listaDeVotos);
             break;
+            case "8":       //Editar eleicao
+                System.out.printf("Qual a eleicao que quer editar?\n");
+                eleicoes = rmi.ShowUnstartedElections();
+                ShowListas(eleicoes);
+                if(eleicoes.compareTo("Nao existem eleicoes nao ativas.")==0)break;
+                try{
+                    eleicao = reader.readLine();
+                }catch(Exception e){}
+                System.out.printf("Qual a propriedade da eleicao que quer editar?(titulo, descricao, instituicao, dataI, dataF)\n");
+                try{
+                    texto = reader.readLine();
+                }catch(Exception e){}
+                System.out.printf("Nova/novo %s: ",texto);
+                try{
+                    if(texto.compareTo("titulo")==0 || texto.compareTo("descricao")==0 || texto.compareTo("instituicao")==0){ 
+                    altString = reader.readLine();
+                    result = rmi.editElection1(altString, texto, eleicao);
+                    System.out.println(result);
+                    }
+                    else if(texto.compareTo("dataI")==0 || texto.compareTo("dataF")==0){
+                        do{
+                            altString = reader.readLine();          
+                            String[] segment = altString.split(";");
+                            String[] dataFi = segment[0].split("/");
+                            String[] timeF = segment[1].split(":");
+                            mes=Integer.parseInt(dataFi[0]);
+                            dia=Integer.parseInt(dataFi[1]);
+                            ano=Integer.parseInt(dataFi[2]);
+                            hora=Integer.parseInt(timeF[0]);
+                            minuto=Integer.parseInt(timeF[1]);
+                        }while((mes>12 || mes<1 )||(dia>31 || dia<1 )||(ano>2100 || ano<1980 )||(hora>23 || hora<0 )||(minuto>59 || minuto<0 ));
+                        altCalendar.set(ano,mes-1,dia,hora,minuto);
+                        result = rmi.editElection2(altCalendar, texto, eleicao);
+                        System.out.println(result);
+                    }
+                }catch(Exception e){}
+                break;
         }
     }
 }

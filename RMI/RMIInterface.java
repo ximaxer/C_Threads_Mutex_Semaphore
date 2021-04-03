@@ -20,4 +20,7 @@ public interface RMIInterface extends Remote{
     String addVote(String username, String electionName, String listaPretendida) throws InvalidUsername, RemoteException;
     boolean checkElectionExists(String electionName) throws RemoteException;
     String showWhereVoted(String electionName) throws RemoteException;
+    String ShowUnstartedElections() throws RemoteException;
+    String editElection1(String change, String property,String electionName) throws RemoteException;
+    String editElection2(Calendar change, String property,String electionName) throws RemoteException;
 }

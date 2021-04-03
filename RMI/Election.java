@@ -61,6 +61,27 @@ public class Election implements Serializable {
     public ArrayList<Listas> getListas() {
         return listas;
     }
+  
+
+    public void setDataI(Calendar newDataI) {
+        this.dataI = newDataI;
+    }
+
+    public void setDataF(Calendar newDataF) {
+        this.dataF = newDataF;
+    }
+
+    public void setTitulo(String newTitulo) {
+        this.titulo = newTitulo;
+    }
+
+    public void setDescricao(String newDescricao) {
+        this.descricao = newDescricao;;
+    }
+
+    public void setInstituicao(String newInstituicao) {
+        this.instituicao = newInstituicao;
+    }
 
     public String showWherePeopleVoted(){
         String info="";
