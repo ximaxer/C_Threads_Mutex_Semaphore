@@ -12,7 +12,7 @@ public interface RMIInterface extends Remote{
     String addTableToElection(String table, String electionName) throws RemoteException;
     String addListaToElection(String lista, String electionName) throws RemoteException;
     String removeTableFromElection(String table, String election) throws RemoteException;
-    void adicionarMesaDeVoto(String departamento) throws RemoteException;
+    void adicionarMesaDeVoto(String departamento, String ip) throws RemoteException;
     String evalCredentials(String username, String password) throws RemoteException, Exception;
     String ShowActiveElections() throws RemoteException;
     long backupServer() throws RemoteException, UnknownHostException;

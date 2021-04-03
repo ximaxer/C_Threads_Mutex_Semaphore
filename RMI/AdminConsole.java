@@ -28,6 +28,22 @@ public class AdminConsole {
         System.out.printf("\n");
     }
 
+    public static boolean isAddressValid(String address){
+        if(address.length()>15)return false; 
+        String repartida[] =address.split(".");
+        if(repartida.length>4)return false;
+        int primeiro, segundo, terceiro, quarto;
+        try {
+            primeiro=Integer.parseInt(repartida[0]);
+            segundo=Integer.parseInt(repartida[1]);
+            terceiro=Integer.parseInt(repartida[2]);
+            quarto=Integer.parseInt(repartida[3]);
+        } catch (final NumberFormatException e) {
+            return false;
+        }
+        if(primeiro>255 || primeiro<0 || segundo>255 || segundo<0 || terceiro>255 || terceiro<0 || quarto>255 || quarto<0)return false;
+        return true;
+    }
 
     public static void main(String args[]) throws AccessException, RemoteException, NotBoundException, UsernameAlreadyExistsException, ElectionAlreadyExistsException, MalformedURLException{ 
         
@@ -47,6 +63,7 @@ public class AdminConsole {
         Calendar  dataF = Calendar.getInstance();
         String type = "";
         String departamento = "";
+        String ip = "";
         String titulo = "";
         String descricao = "";
         String eleicao = "";
@@ -106,9 +123,15 @@ public class AdminConsole {
                 try{   
                     departamento = reader.readLine();       //departamento
                 }catch(Exception e){}
-                    rmi.adicionarMesaDeVoto(departamento);
+                System.out.printf("Introduza o ip da mesa de voto\n");
+                try{   
+                    ip = reader.readLine();       //departamento
+                }catch(Exception e){}
+                    if(isAddressValid(ip))rmi.adicionarMesaDeVoto(departamento,ip);
+                    else System.out.printf("Endereco invalido!\n");
+                    
                 break;
-                case "3":       //Associar mesa de voto
+            case "3":       //Associar mesa de voto
                 System.out.printf("Qual a eleicao a qual quer associar mesas?\n");
                 String eleicoes = rmi.ShowActiveElections();
                 ShowListas(eleicoes);

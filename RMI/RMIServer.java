@@ -28,9 +28,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         }catch (Exception e){}
     }
 
-    public void adicionarMesaDeVoto(String departamento) throws RemoteException{
+    public void adicionarMesaDeVoto(String departamento,String ip) throws RemoteException{
         if(!checkTableExists(departamento)){
-            data.add(new Table(departamento));
+            data.add(new Table(departamento,ip));
         }
     }
 
