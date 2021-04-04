@@ -28,9 +28,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         }catch (Exception e){}
     }
 
-    public void adicionarMesaDeVoto(String departamento,String ip) throws RemoteException{
+    public void adicionarMesaDeVoto(String departamento,String ip,String port) throws RemoteException{
         if(!checkTableExists(departamento)){
-            data.add(new Table(departamento,ip));
+            data.add(new Table(departamento,ip,port));
         }
     }
 
@@ -40,6 +40,29 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
                 return true;
         }
         return false;
+    }
+
+    public String atribuiAdressoMesa(String departamento) throws RemoteException{
+        for(Table mesa : data.getTables()){
+            System.out.println(mesa.getDepartamento());
+            if(mesa.getDepartamento().equals(departamento))return mesa.getIP();
+        }
+        return "Esta mesa nao existe!\n";
+    }
+
+    public String atribuiPortaMesa(String departamento) throws RemoteException{
+        for(Table mesa : data.getTables()){
+            if(mesa.getDepartamento().equals(departamento))return mesa.getPort();
+        }
+        return "Esta mesa nao existe!\n";
+    }
+
+    public String showMesas() throws RemoteException{
+        String ret="";
+        for(Table mesa : data.getTables()){
+            ret+=mesa.getDepartamento()+"\n";
+        }
+        return ret;
     }
 
     public void RegisterPerson(String username, String password, String instituicao, int telefone, String morada, int CC, Calendar valCC,String type) throws RemoteException, UsernameAlreadyExistsException{

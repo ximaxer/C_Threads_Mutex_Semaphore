@@ -10,11 +10,13 @@ public class Table implements Serializable{
     private static final long serialVersionUID = 1L;
     private String departamento;
     private String IP;
+    private String PORT;
     private int terminaisAtivos;
     
-    public Table(String departamento,String ip){
+    public Table(String departamento,String ip,String port){
         this.departamento = departamento;
         this.IP=ip;
+        this.PORT=port;
         this.terminaisAtivos = 0;
     }
 
@@ -24,6 +26,10 @@ public class Table implements Serializable{
 
     public String getIP() {
         return IP;
+    }
+
+    public String getPort() {
+        return PORT;
     }
 
     public int getTerminaisAtivos() {

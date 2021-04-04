@@ -30,8 +30,9 @@ public class AdminConsole {
 
     public static boolean isAddressValid(String address){
         if(address.length()>15)return false; 
-        String repartida[] =address.split(".");
-        if(repartida.length>4)return false;
+        String repartida[] =address.split("\\.");
+        System.out.println(address);
+        if(repartida.length>4 || repartida.length<=0)return false;
         int primeiro, segundo, terceiro, quarto;
         try {
             primeiro=Integer.parseInt(repartida[0]);
@@ -41,7 +42,7 @@ public class AdminConsole {
         } catch (final NumberFormatException e) {
             return false;
         }
-        if(primeiro>255 || primeiro<0 || segundo>255 || segundo<0 || terceiro>255 || terceiro<0 || quarto>255 || quarto<0)return false;
+        if(primeiro>239 || primeiro<224 || segundo>255 || segundo<0 || terceiro>255 || terceiro<0 || quarto>255 || quarto<0)return false;
         return true;
     }
 
@@ -64,6 +65,7 @@ public class AdminConsole {
         String type = "";
         String departamento = "";
         String ip = "";
+        String port ="";
         String titulo = "";
         String descricao = "";
         String eleicao = "";
@@ -126,10 +128,11 @@ public class AdminConsole {
                 System.out.printf("Introduza o ip da mesa de voto\n");
                 try{   
                     ip = reader.readLine();       //departamento
+                    System.out.printf("Introduza a porta da mesa de voto\n");
+                    port = reader.readLine();       //departamento
                 }catch(Exception e){}
-                    if(isAddressValid(ip))rmi.adicionarMesaDeVoto(departamento,ip);
+                    if(isAddressValid(ip))rmi.adicionarMesaDeVoto(departamento,ip,port);
                     else System.out.printf("Endereco invalido!\n");
-                    
                 break;
             case "3":       //Associar mesa de voto
                 System.out.printf("Qual a eleicao a qual quer associar mesas?\n");

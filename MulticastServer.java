@@ -18,10 +18,24 @@ public class MulticastServer extends Thread{
     public static HashMap<String, String> listaTerminais= new HashMap<String, String>();
     public static boolean waitingForTerminal=true;
     public static String newTerm="";
+    public static String dep="";
+    public static String address="";
+    public static String porta="";
 
     public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException{
-        
+        Scanner keyboardScanner = null;
+        keyboardScanner = new Scanner(System.in);
         rmi = (RMIInterface) Naming.lookup("server");
+        do{
+            System.out.print("Departamento da mesa:");
+            dep = keyboardScanner.nextLine();
+            try {
+                address = rmi.atribuiAdressoMesa(dep);
+                porta = rmi.atribuiPortaMesa(dep);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }while(address.equals("") || address.equals("Esta mesa nao existe!\n"));
         System.out.println("SERVER Initializing...");
         System.out.println("Multicast Server running...");
         MulticastServer2 inputter = new MulticastServer2();
@@ -30,6 +44,8 @@ public class MulticastServer extends Thread{
         gestor.start();
         MulticastServer server = new MulticastServer();
         server.start();
+        atribuicaoDeTerminais atribuidor = new atribuicaoDeTerminais();
+        atribuidor.start();
     }
 
     public MulticastServer(){
@@ -41,11 +57,11 @@ public class MulticastServer extends Thread{
         boolean listen=true;
         MulticastSocket socket = null;
         try{
-            InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
+            InetAddress group = InetAddress.getByName(address  /*CONST.MULTICAST.MULTICAST_ADDRESS*/);
             while (true){
                     newTerm="Nao ha terminais disponiveis.";
                     Thread.sleep(50);
-                    socket = new MulticastSocket(CONST.MULTICAST.PORT);
+                    socket = new MulticastSocket(Integer.parseInt(porta));
                     socket.joinGroup(group);
                     byte[] buffer = new byte[BUFFER_SIZE];
                     DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
@@ -62,7 +78,7 @@ public class MulticastServer extends Thread{
                     if (response != null) {
                         System.out.println("SENDING RESPONSE: "+ response + "to "+packet.getAddress()); //DEBUG
                         buffer = response.getBytes();
-                        packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
+                        packet = new DatagramPacket(buffer, buffer.length, group, Integer.parseInt(porta));
                         socket = new MulticastSocket();
                         socket.send(packet);
                     }
@@ -80,6 +96,7 @@ public class MulticastServer extends Thread{
     }
 
 	String handle(String message) throws RemoteException, Exception {
+        System.out.println(message);
 		HashMap<String, String> messageMap = parseMessage(message);
 		if (messageMap == null)	return null;
 		try { return createResponse(messageMap); }
@@ -186,10 +203,11 @@ class gestaoTerminais extends Thread{
     public void run() {
         MulticastSocket socket = null;
         try{
-            InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
+            System.out.println(MulticastServer.address);
+            InetAddress group = InetAddress.getByName(MulticastServer.address);//CONST.MULTICAST.MULTICAST_ADDRESS
             while (true){
                 if(isEveryTermBlocked(MulticastServer.listaTerminais))MulticastServer.waitingForTerminal=true;
-                socket = new MulticastSocket(CONST.MULTICAST.PORT);
+                socket = new MulticastSocket(Integer.parseInt(MulticastServer.porta));
                 socket.joinGroup(group);
                 byte[] buffer = new byte[MulticastServer.BUFFER_SIZE];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
@@ -201,7 +219,7 @@ class gestaoTerminais extends Thread{
                         System.out.println("Terminal with IP:"+MulticastServer.newTerm+" "+response);
                         response=MulticastServer.newTerm+"|"+response;
                         buffer = response.getBytes();
-                        packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
+                        packet = new DatagramPacket(buffer, buffer.length, group, Integer.parseInt(MulticastServer.porta));
                         socket = new MulticastSocket();
                         socket.send(packet);
                         MulticastServer.NeedNewTerm=false;
@@ -240,4 +258,40 @@ class gestaoTerminais extends Thread{
         return "Nao ha terminais disponiveis.";
     }
 
+}
+class atribuicaoDeTerminais extends Thread{
+    public static String CCs="";
+    public atribuicaoDeTerminais() {
+        super("Server " + (long) (1));
+    }
+    public void run() {
+        MulticastSocket socket = null;
+        try{
+            InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
+            while (true){
+                String message="";
+                socket = new MulticastSocket(CONST.MULTICAST.PORT);
+                socket.joinGroup(group);
+                byte[] buffer = new byte[256];
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                socket.receive(packet);
+                message = new String(packet.getData(), 0, packet.getLength());
+                if(message.equals(MulticastServer.dep)){
+                    String response=MulticastServer.address+";"+MulticastServer.porta;
+                    System.out.println(response);
+                    buffer = response.getBytes();
+                    packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
+                    socket.send(packet);
+                }
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
+            assert socket != null;
+            socket.close();
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }    
+    }
 }

@@ -12,7 +12,7 @@ public interface RMIInterface extends Remote{
     String addTableToElection(String table, String electionName) throws RemoteException;
     String addListaToElection(String lista, String electionName) throws RemoteException;
     String removeTableFromElection(String table, String election) throws RemoteException;
-    void adicionarMesaDeVoto(String departamento, String ip) throws RemoteException;
+    void adicionarMesaDeVoto(String departamento, String ip, String port) throws RemoteException;
     String evalCredentials(String username, String password) throws RemoteException, Exception;
     String ShowActiveElections() throws RemoteException;
     long backupServer() throws RemoteException, UnknownHostException;
@@ -23,4 +23,7 @@ public interface RMIInterface extends Remote{
     String ShowUnstartedElections() throws RemoteException;
     String editElection1(String change, String property,String electionName) throws RemoteException;
     String editElection2(Calendar change, String property,String electionName) throws RemoteException;
+    String atribuiAdressoMesa(String departamento) throws RemoteException;
+    String atribuiPortaMesa(String departamento) throws RemoteException;
+    String showMesas() throws RemoteException;
 }

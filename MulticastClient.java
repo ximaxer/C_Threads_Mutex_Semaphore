@@ -26,8 +26,6 @@ public class MulticastClient extends Thread {
     }
 
     public static void main(String[] args) {
-        MulticastClient client = new MulticastClient();
-        client.start();
         MulticastUser user = new MulticastUser();
         user.start();
     }
@@ -35,8 +33,8 @@ public class MulticastClient extends Thread {
     public void run() {
         MulticastSocket socket = null;
         try {
-            socket = new MulticastSocket(CONST.MULTICAST.PORT);  // create socket and bind it
-            InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
+            socket = new MulticastSocket(Integer.parseInt(MulticastUser.parte[1]));  // create socket and bind it
+            InetAddress group = InetAddress.getByName(MulticastUser.parte[0]);
             socket.joinGroup(group);
             while (true) {
                 byte[] buffer = new byte[3*1024];
@@ -112,22 +110,55 @@ public class MulticastClient extends Thread {
 
 // SENDER
 class MulticastUser extends Thread {
+    public static String[] parte;
     String username="", password="", electionName="";
     public MulticastUser() {
         super("User " + (long) (1));
     }
 
     public void run() {
+        Scanner keyboardScanner = null;
+        keyboardScanner = new Scanner(System.in);
         boolean sai=false;
         MulticastSocket socket = null;
-        Scanner keyboardScanner = null;
         String message = "";
-        keyboardScanner = new Scanner(System.in);
-        System.out.print(this.getName() + " ready, ");
         sai=false;
         try {
+            String dep = "";
+            socket = new MulticastSocket(CONST.MULTICAST.PORT);
+            System.out.print("Mesa ao qual o terminal corresponde:");
+            dep = keyboardScanner.nextLine();
+            byte[] buffer = dep.getBytes();
+            InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
+            socket.joinGroup(group);
+            if(dep!=""){
+                buffer = dep.getBytes();
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
+                socket.send(packet);
+                buffer = new byte[256];
+                packet = new DatagramPacket(buffer, buffer.length);
+                socket.receive(packet);
+                if(new String(packet.getData(), 0, packet.getLength()).equals(dep)){
+                    packet = new DatagramPacket(buffer, buffer.length);
+                    socket.receive(packet);
+                }
+                String total=new String(packet.getData(), 0, packet.getLength());
+                System.out.println(total);
+                parte = total.split(";");
+                dep = "";
+            }
+        } catch (IOException e2) {
+            e2.printStackTrace();
+        } finally{
+            socket.close();
+        }
+        System.out.print(this.getName() + " ready, ");
+        MulticastClient client = new MulticastClient();
+        client.start();
+
+        try {
             while (true) {
-                socket = new MulticastSocket(CONST.MULTICAST.PORT);  // create socket without binding it (only for sending)
+                socket = new MulticastSocket(Integer.parseInt(parte[1]));  // create socket without binding it (only for sending)
                 message = "";
                 Thread.sleep(200);
                 //System.out.println(MulticastClient.hasIP + "    I   " + MulticastClient.isBlocked);
@@ -160,8 +191,8 @@ class MulticastUser extends Thread {
                         if(message!=""){
                             message="-"+message;
                             byte[] buffer = message.getBytes();
-                            InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
-                            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
+                            InetAddress group = InetAddress.getByName(parte[0]);
+                            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, Integer.parseInt(parte[1]));
                             socket.send(packet);
                             message = "";
                         }
@@ -170,8 +201,8 @@ class MulticastUser extends Thread {
                 }else{
                         message = "-give my my ip";
                         byte[] buffer = message.getBytes();
-                        InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
-                        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
+                        InetAddress group = InetAddress.getByName(parte[0]);
+                        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, Integer.parseInt(parte[1]));
                         socket.send(packet);
                         message = "";
                         MulticastClient.hasIP=true;
@@ -226,15 +257,15 @@ class Acaba {
         public void run() {
             MulticastSocket socket = null;
             try {
-                socket = new MulticastSocket(CONST.MULTICAST.PORT);
+                socket = new MulticastSocket(Integer.parseInt(MulticastUser.parte[1]));
                 MulticastClient.isBlocked=true;
                 MulticastClient.LogResult=false;
                 MulticastClient.hasChosenElection=false;;
                 MulticastClient.hasVoted=false;
                 String message="-type|block;terminal|"+MulticastClient.myID;
                 byte[] buffer = message.getBytes();
-                InetAddress group = InetAddress.getByName(CONST.MULTICAST.MULTICAST_ADDRESS);
-                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, CONST.MULTICAST.PORT);
+                InetAddress group = InetAddress.getByName(MulticastUser.parte[0]);
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, Integer.parseInt(MulticastUser.parte[1]));
                 socket.send(packet);
                 message = "";
             } catch (IOException e) {
