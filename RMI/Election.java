@@ -14,7 +14,7 @@ public class Election implements Serializable {
     private String titulo;
     private String descricao;
     private String instituicao;
-    private ArrayList<User> hasVoted = new ArrayList<>();
+    private HashMap<User,Calendar> hasVoted;
     private ArrayList<Table> listaMesas = new ArrayList<>();
     private ArrayList<Listas> listas = new ArrayList<>();
 
@@ -24,7 +24,7 @@ public class Election implements Serializable {
         this.titulo = titulo;
         this.descricao = descricao;
         this.instituicao = instituicao;
-        this.hasVoted = new ArrayList<>();
+        this.hasVoted = new HashMap<>();
         this.listaMesas = new ArrayList<>();
         this.listas = new ArrayList<>();
     
@@ -50,7 +50,7 @@ public class Election implements Serializable {
         return instituicao;
     }
 
-    public ArrayList<User> getListaCandidatosQueVotaram() {
+    public HashMap<User,Calendar> getListaCandidatosQueVotaram() {
         return hasVoted;
     }
 
@@ -85,8 +85,8 @@ public class Election implements Serializable {
 
     public String showWherePeopleVoted(){
         String info="";
-        for(User user: this.getListaCandidatosQueVotaram()){
-            info+=user.getUsername()+ " - " +user.getInstituicao()+"\n";
+        for(User user: this.getListaCandidatosQueVotaram().keySet()){
+            info+=user.getUsername()+ " - " +user.getInstituicao()+" - "+this.getListaCandidatosQueVotaram().get(user).getTime()+"\n";
         }
         return info;
     }

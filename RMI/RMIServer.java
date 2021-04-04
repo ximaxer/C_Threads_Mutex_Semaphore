@@ -22,7 +22,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     protected RMIServer() throws RemoteException {
         super();
         this.data = new Data();
-        //data.createFiles();
+        data.createFiles();
         try{
             data.loadData();
         }catch (Exception e){}
@@ -31,6 +31,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     public void adicionarMesaDeVoto(String departamento,String ip,String port) throws RemoteException{
         if(!checkTableExists(departamento)){
             data.add(new Table(departamento,ip,port));
+            data.updateRecords();
         }
     }
 
@@ -153,7 +154,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     
     public String showWhereVoted(String electionName) throws RemoteException{
         String listaDeVotosELocais="";
-        if(checkElectionExists(electionName))return "Eleicao inexistente";
+        if(!checkElectionExists(electionName))return "Eleicao inexistente";
         Election election=data.getElection(electionName);
         listaDeVotosELocais = election.showWherePeopleVoted();
         return listaDeVotosELocais;
@@ -194,7 +195,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     }
 
     public boolean VerifyHasUserAlreadyVoted(User user,Election election) throws InvalidUsername{
-        for(User person: election.getListaCandidatosQueVotaram()){
+        for(User person: election.getListaCandidatosQueVotaram().keySet()){
             if(person.getUsername().compareTo(user.getUsername()) == 0)
                 return true;
         }
@@ -207,7 +208,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
             for(Listas lista: election.getListas()){
                 if(lista.getName().compareTo(listaPretendida)==0){
                     lista.incrementaVoto();
-                    election.getListaCandidatosQueVotaram().add(data.getUser(username));
+                    election.getListaCandidatosQueVotaram().put(data.getUser(username),Calendar.getInstance());
                     return "Obrigado por votar.";
                 }
             }
@@ -237,9 +238,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     }
 
 
-    public void addUserToElection(User user, Election election){
+    /*public void addUserToElection(User user, Election election){
         election.getListaCandidatosQueVotaram().add(user);
-    }
+    }*/
 
     public String addTableToElection(String table, String electionName) throws RemoteException{
         if(!VerifyIfActiveElection(electionName))return "Eleicao nao existe!";

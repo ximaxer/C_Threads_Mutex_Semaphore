@@ -72,7 +72,7 @@ public class AdminConsole {
         String result = "";
         String altString = "";
         Calendar  altCalendar = Calendar.getInstance();
-        System.out.printf("1 - Registar Pessoas\n2 - Criar mesa de voto\n3 - Associar mesa de voto\n4 - Desassociar mesa de voto\n5 - Criar eleicao\n6 - Adicionar lista a eleicao\n7 - Mostrar local no qual votou cada eleitor\n8 - Editar eleicao\n");
+        System.out.printf("1 - Registar Pessoas\n2 - Criar mesa de voto\n3 - Associar mesa de voto\n4 - Desassociar mesa de voto\n5 - Criar eleicao\n6 - Adicionar lista a eleicao\n7 - Mostrar local e momento no qual votou cada eleitor\n8 - Editar eleicao\n");
         try{
             texto = reader.readLine();
         }catch(Exception e){}
@@ -148,7 +148,7 @@ public class AdminConsole {
                     result= rmi.addTableToElection(texto, eleicao);
                     System.out.printf("\n%s",result);
                 break;
-            case "4":       //Associar mesa de voto
+            case "4":       //Desassociar mesa de voto
                 System.out.printf("Qual a eleicao da qual quer desassociar mesas?\n");
                 eleicoes = rmi.ShowActiveElections();
                 ShowListas(eleicoes);
@@ -223,7 +223,7 @@ public class AdminConsole {
                 result= rmi.addListaToElection(texto, eleicao);
                 System.out.printf("%s\n",result);
             break;
-            case "7":
+            case "7":    //Saber onde cada pessoa votou
                 String listaDeVotos="";
                 System.out.printf("Qual a eleicao que quer saber onde cada pessoa votou?\n");
                 lista = rmi.ShowActiveElections();

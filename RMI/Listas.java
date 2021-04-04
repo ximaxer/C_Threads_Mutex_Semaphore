@@ -1,6 +1,12 @@
 package RMI;
 
-public class Listas {
+import java.io.Serializable;
+
+public class Listas implements Serializable{
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private String name;
     private int votos;
 
