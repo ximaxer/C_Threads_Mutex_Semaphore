@@ -25,7 +25,8 @@ public class MulticastServer extends Thread{
     public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException{
         Scanner keyboardScanner = null;
         keyboardScanner = new Scanner(System.in);
-        rmi = (RMIInterface) Naming.lookup("server");
+        //rmi = (RMIInterface) Naming.lookup("server");
+        rmi = (RMIInterface) LocateRegistry.getRegistry("localhost",7001).lookup("server");
         do{
             System.out.print("Departamento da mesa:");
             dep = keyboardScanner.nextLine();

@@ -9,7 +9,7 @@ public class Data {
     private ArrayList<Election> elections;
     private ArrayList<Table> tables;
 
-    private HashMap<String, String> sessionFiles;
+    private HashMap<String, String> files;
     private static String USERS_FILE = "files/usersObjFile";
     private static String ADMINS_FILE = "files/adminsObjFile";
     private static String ELECTIONS_FILE = "files/electionsObjFile";
@@ -21,7 +21,7 @@ public class Data {
         this.admins = new ArrayList<>();
         this.elections = new ArrayList<>();
         this.tables = new ArrayList<>();
-        this.sessionFiles = new HashMap<>();
+        this.files = new HashMap<>();
     }
 
     public void add(User user){
@@ -53,10 +53,10 @@ public class Data {
         readFile(ELECTIONS_FILE, 3);
         readFile(TABLES_FILE, 4);
 
-        this.sessionFiles.put("users", USERS_FILE);
-        this.sessionFiles.put("admins", ADMINS_FILE);
-        this.sessionFiles.put("elections", ELECTIONS_FILE);
-        this.sessionFiles.put("tables", TABLES_FILE);
+        this.files.put("users", USERS_FILE);
+        this.files.put("admins", ADMINS_FILE);
+        this.files.put("elections", ELECTIONS_FILE);
+        this.files.put("tables", TABLES_FILE);
 
     }
 
@@ -111,10 +111,10 @@ public class Data {
     
 
     public synchronized void updateRecords(){
-        writeFile(this.sessionFiles.get("users"), 1);
-        writeFile(this.sessionFiles.get("admins"), 2);
-        writeFile(this.sessionFiles.get("elections"), 3);
-        writeFile(this.sessionFiles.get("tables"), 4);
+        writeFile(this.files.get("users"), 1);
+        writeFile(this.files.get("admins"), 2);
+        writeFile(this.files.get("elections"), 3);
+        writeFile(this.files.get("tables"), 4);
     }
 
 

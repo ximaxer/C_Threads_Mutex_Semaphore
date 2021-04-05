@@ -22,6 +22,7 @@ public interface RMIInterface extends Remote{
     String showWhereVoted(String electionName) throws RemoteException;
     String ShowUnstartedElections() throws RemoteException;
     String ShowFinishedElections() throws RemoteException;
+    String ShowElections() throws RemoteException;
     String editElection1(String change, String property,String electionName) throws RemoteException;
     String editElection2(Calendar change, String property,String electionName) throws RemoteException;
     String atribuiAdressoMesa(String departamento) throws RemoteException;

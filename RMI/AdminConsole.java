@@ -48,7 +48,8 @@ public class AdminConsole {
 
     public static void main(String args[]) throws AccessException, RemoteException, NotBoundException, UsernameAlreadyExistsException, ElectionAlreadyExistsException, MalformedURLException{ 
         
-        rmi = (RMIInterface) Naming.lookup("server");
+        //rmi = (RMIInterface) Naming.lookup("server");
+        rmi = (RMIInterface) LocateRegistry.getRegistry("localhost",7001).lookup("server");
 		InputStreamReader input = new InputStreamReader(System.in);
 		BufferedReader reader = new BufferedReader(input);
 		String texto = "";
@@ -226,7 +227,7 @@ public class AdminConsole {
             case "7":    //Saber onde cada pessoa votou
                 String listaDeVotos="";
                 System.out.printf("Qual a eleicao que quer saber onde cada pessoa votou?\n");
-                lista = rmi.ShowActiveElections();
+                lista = rmi.ShowElections();
                 ShowListas(lista);
                 try{
                     eleicao = reader.readLine();

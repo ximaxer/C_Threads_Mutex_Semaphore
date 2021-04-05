@@ -18,7 +18,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     protected RMIServer() throws RemoteException {
         super();
         this.data = new Data();
-        data.createFiles();
+        //data.createFiles();
         try{
             data.loadData();
         }catch (Exception e){}
@@ -99,7 +99,23 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         }
         return false;
     }
+    public boolean checkElectionExists2(String electionName) throws RemoteException{
+        for(Election election: data.getElections()){
+            if(election.getTitulo().compareTo(electionName) == 0 )
+                return true;
+        }
+        return false;
+    }
     
+    public String ShowElections() throws RemoteException{
+        String listaEleicoes="";
+        for(Election election: data.getElections()){
+            listaEleicoes+=election.getTitulo()+";";
+        }
+        if(listaEleicoes.equals(""))return "Nao existem eleicoes.";
+        return listaEleicoes;
+    }
+
     public String ShowActiveElections() throws RemoteException{
         String listaEleicoes="";
         for(Election election: data.getElections()){
@@ -159,7 +175,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     
     public String showWhereVoted(String electionName) throws RemoteException{
         String listaDeVotosELocais="";
-        if(!checkElectionExists(electionName))return "Eleicao inexistente";
+        if(!checkElectionExists2(electionName))return "Eleicao inexistente";
         Election election=data.getElection(electionName);
         listaDeVotosELocais = election.showWherePeopleVoted();
         return listaDeVotosELocais;
@@ -214,6 +230,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
                 if(lista.getName().compareTo(listaPretendida)==0){
                     lista.incrementaVoto();
                     election.getListaCandidatosQueVotaram().put(data.getUser(username),Calendar.getInstance());
+                    data.updateRecords();
                     return "Obrigado por votar.";
                 }
             }
@@ -388,7 +405,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
             totalVotos += lista.getVotos();
         }
         for(Listas lista: data.getElection(electionName).getListas()){
-            results += lista.getName()+" : "+ lista.getVotos()+" votos("+((lista.getVotos()/totalVotos)*100)+"%\n)";
+            results += lista.getName()+" : "+ lista.getVotos()+" votos("+((lista.getVotos()/totalVotos)*100)+"%)\n";
         }
         return results;
     }
@@ -403,10 +420,11 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         while(!alive){
             try {
                 RMIServer rmi = new RMIServer();
-                Naming.rebind("server", rmi);
+                //Naming.rebind("server", rmi);
+                LocateRegistry.createRegistry(7001).rebind("server", rmi);
                 System.out.println("RMI Server ready.");
                 alive = true;
-            } catch (Exception eee) {
+            } catch (Exception e) {
                 alive = false;
                 System.out.println("To sleep I go, only 10 sec tho :(");
                 Thread.sleep(10000);
