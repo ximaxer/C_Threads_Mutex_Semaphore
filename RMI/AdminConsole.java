@@ -72,7 +72,7 @@ public class AdminConsole {
         String result = "";
         String altString = "";
         Calendar  altCalendar = Calendar.getInstance();
-        System.out.printf("1 - Registar Pessoas\n2 - Criar mesa de voto\n3 - Associar mesa de voto\n4 - Desassociar mesa de voto\n5 - Criar eleicao\n6 - Adicionar lista a eleicao\n7 - Mostrar local e momento no qual votou cada eleitor\n8 - Editar eleicao\n");
+        System.out.printf("1 - Registar Pessoas\n2 - Criar mesa de voto\n3 - Associar mesa de voto\n4 - Desassociar mesa de voto\n5 - Criar eleicao\n6 - Adicionar lista a eleicao\n7 - Mostrar local e momento no qual votou cada eleitor\n8 - Editar eleicao\n9 - Consultar resultados eleicoes passadas\n");
         try{
             texto = reader.readLine();
         }catch(Exception e){}
@@ -269,6 +269,17 @@ public class AdminConsole {
                         result = rmi.editElection2(altCalendar, texto, eleicao);
                         System.out.println(result);
                     }
+                }catch(Exception e){}
+                break;
+                case "9":  //mostrar resultados de eleicao passadas
+                System.out.printf("Qual a eleicao passada que quer consultar?\n");
+                eleicoes = rmi.ShowFinishedElections();
+                ShowListas(eleicoes);
+                if(eleicoes.compareTo("Nao existem eleicoes acabadas.")==0)break;
+                try{
+                    eleicao = reader.readLine();
+                    result = rmi.showResultsPastElection(eleicao);
+                    System.out.println(result);
                 }catch(Exception e){}
                 break;
         }

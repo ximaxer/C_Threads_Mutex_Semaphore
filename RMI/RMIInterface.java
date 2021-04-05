@@ -21,9 +21,11 @@ public interface RMIInterface extends Remote{
     boolean checkElectionExists(String electionName) throws RemoteException;
     String showWhereVoted(String electionName) throws RemoteException;
     String ShowUnstartedElections() throws RemoteException;
+    String ShowFinishedElections() throws RemoteException;
     String editElection1(String change, String property,String electionName) throws RemoteException;
     String editElection2(Calendar change, String property,String electionName) throws RemoteException;
     String atribuiAdressoMesa(String departamento) throws RemoteException;
     String atribuiPortaMesa(String departamento) throws RemoteException;
     String showMesas() throws RemoteException;
+    String showResultsPastElection(String electionName)throws RemoteException;
 }

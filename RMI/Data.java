@@ -2,16 +2,12 @@ package RMI;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
-
-
 
 public class Data {
     private ArrayList<User> users;
     private ArrayList<Admin> admins;
     private ArrayList<Election> elections;
     private ArrayList<Table> tables;
-    private ArrayList<Listas> listas;
 
     private HashMap<String, String> sessionFiles;
     private static String USERS_FILE = "files/usersObjFile";
@@ -25,11 +21,8 @@ public class Data {
         this.admins = new ArrayList<>();
         this.elections = new ArrayList<>();
         this.tables = new ArrayList<>();
-        this.listas = new ArrayList<>();
         this.sessionFiles = new HashMap<>();
     }
-
-    private void exitProgram(){ System.exit(1); }
 
     public void add(User user){
         this.users.add(user);
@@ -51,10 +44,7 @@ public class Data {
     public void remove(Table table){
         this.tables.remove(table);
     } 
-
-    public void add(Listas lista){
-        this.listas.add(lista);
-    } 
+ 
 
 
     public synchronized void loadData() throws Exception{
@@ -68,19 +58,6 @@ public class Data {
         this.sessionFiles.put("elections", ELECTIONS_FILE);
         this.sessionFiles.put("tables", TABLES_FILE);
 
-    }
-
-
-    public synchronized void loadData(String userFileName, String adminFileName, String electionFileName, String tablesFileName) throws Exception{
-        readFile(userFileName, 1);
-        readFile(adminFileName, 2);
-        readFile(electionFileName, 3);
-        readFile(tablesFileName, 4);
-        
-        this.sessionFiles.put("users", userFileName);
-        this.sessionFiles.put("admins", adminFileName);
-        this.sessionFiles.put("elections", electionFileName);
-        this.sessionFiles.put("tables", tablesFileName);
     }
 
     public ArrayList<User> getUsers() {
@@ -99,9 +76,6 @@ public class Data {
         return elections;
     }
 
-    public ArrayList<Listas> getListas() {
-        return listas;
-    }
 
     public Election getElection(String name) {
         for(Election election: elections){
@@ -143,12 +117,6 @@ public class Data {
         writeFile(this.sessionFiles.get("tables"), 4);
     }
 
-    public void createFiles(String userFileName, String adminFileName, String electionFileName, String tablesFileName){
-        writeFile(userFileName, 1);
-        writeFile(adminFileName, 2);
-        writeFile(electionFileName, 3);
-        writeFile(tablesFileName, 4);
-    }
 
     public void createFiles(){
         writeFile(USERS_FILE, 1);
@@ -180,16 +148,15 @@ public class Data {
             objStream.close();
             file.close();
 
-        } catch (IOException | ClassNotFoundException e) {
+        } catch(Exception e){
             e.printStackTrace();
-            exitProgram();
         }
     
     }
 
     private synchronized void writeFile(String filename, int variableFlag){
         if (filename == null){
-            System.err.println("[ERROR] Filename is null");
+            System.out.println("Filename is null");
             return;
         }
 

@@ -2,13 +2,15 @@ package RMI;
 
 import java.util.*;
 
-import java.net.*;
-import java.io.*;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.ArrayList;
 
 public class Election implements Serializable {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private Calendar dataI;
     private Calendar dataF;
     private String titulo;

@@ -2,15 +2,11 @@ package RMI;
 
 import java.rmi.*;
 import java.rmi.server.*;
-import java.io.IOException;
 import java.net.*;
 import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-
-import static java.lang.Thread.sleep;
 
 public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     Data data;
@@ -119,6 +115,15 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
             if(checkElectionIsUnstarted(election)) listaEleicoes+=election.getTitulo()+";";
         }
         if(listaEleicoes.equals(""))return "Nao existem eleicoes nao ativas.";
+        return listaEleicoes;
+    }
+
+    public String ShowFinishedElections() throws RemoteException{
+        String listaEleicoes="";
+        for(Election election: data.getElections()){
+            if(checkElectionIsFinished(election)) listaEleicoes+=election.getTitulo()+";";
+        }
+        if(listaEleicoes.equals(""))return "Nao existem eleicoes acabadas.";
         return listaEleicoes;
     }
 
@@ -237,10 +242,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return "Lista associada com sucesso!";
     }
 
-
-    /*public void addUserToElection(User user, Election election){
-        election.getListaCandidatosQueVotaram().add(user);
-    }*/
 
     public String addTableToElection(String table, String electionName) throws RemoteException{
         if(!VerifyIfActiveElection(electionName))return "Eleicao nao existe!";
@@ -380,26 +381,38 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return "Eleicao nao foi editada.";
     }
 
+    public String showResultsPastElection(String electionName)throws RemoteException{
+        String results="";
+        int totalVotos=0;
+        for(Listas lista: data.getElection(electionName).getListas()){
+            totalVotos += lista.getVotos();
+        }
+        for(Listas lista: data.getElection(electionName).getListas()){
+            results += lista.getName()+" : "+ lista.getVotos()+" votos("+((lista.getVotos()/totalVotos)*100)+"%\n)";
+        }
+        return results;
+    }
+
     public long backupServer(){
         return ProcessHandle.current().pid();
     }
 
-    
-
-    public static void main(String[] args) throws AccessException, RemoteException, NotBoundException, MalformedURLException{
+    public static void main(String[] args) throws AccessException, RemoteException, NotBoundException, MalformedURLException, InterruptedException{
+        Boolean alive = false;
         //System.getProperties().put("java.security.policy", "policy.all");
-        try {
-            RMIServer rmi = new RMIServer();
-            Naming.rebind("server", rmi);
-            System.out.println("RMI Server ready.");
-        } catch (RemoteException re) {
-            System.out.println("Exception in RMIServer.main: " + re);
+        while(!alive){
+            try {
+                RMIServer rmi = new RMIServer();
+                Naming.rebind("server", rmi);
+                System.out.println("RMI Server ready.");
+                alive = true;
+            } catch (Exception eee) {
+                alive = false;
+                System.out.println("To sleep I go, only 10 sec tho :(");
+                Thread.sleep(10000);
+            }
         }
-        catch (MalformedURLException e) {
-            System.out.println("MalformedURLException in RMIServer.main: " + e);
-        }
-           
-           
+            
     }
 
 }

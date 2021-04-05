@@ -1,7 +1,6 @@
 package RMI;
 
 import java.io.Serializable;
-import java.net.InetAddress;
 
 public class Table implements Serializable{
     /**

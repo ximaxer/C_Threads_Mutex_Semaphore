@@ -1,7 +1,5 @@
 package RMI;
 
-import java.net.*;
-import java.io.*;
 import java.io.Serializable;
 import java.util.Calendar;
 
