@@ -95,15 +95,19 @@ public class MulticastServer extends Thread{
             e.printStackTrace();
         }
     }
-
+    /**
+    * Handles the String recieved from a Voting Terminal
+    */
 	String handle(String message) throws RemoteException, Exception {
         System.out.println(message);
 		HashMap<String, String> messageMap = parseMessage(message);
 		if (messageMap == null)	return null;
 		try { return createResponse(messageMap); }
 		catch (InvalidRequestType e){ return null; }
-	}
-
+	} 
+    /**
+    * Creates a Hashmap based on the String recieved
+    */
 	private HashMap<String,String> parseMessage(String message){
 		try {
 			HashMap<String, String> messageMap = new HashMap<>();
@@ -116,6 +120,9 @@ public class MulticastServer extends Thread{
 			return null;
 		}
 	}
+    /**
+    * Creates a response to send to the Voting Terminal
+    */
 	private String createResponse(HashMap<String, String> messageMap) throws InvalidRequestType, RemoteException, Exception{
         //System.out.println("#####"+ messageMap.get("username")+"######"+messageMap.get("password"));
         //String result ="Success!";
@@ -141,8 +148,9 @@ public class MulticastServer extends Thread{
 				throw new InvalidRequestType("Unexpected value: " + messageMap.get("type"));
 		}
 	}
-
-
+    /**
+    * Locks the specified terminal
+    */
     public void lockTerminal(String terminal){
         for (String key : listaTerminais.keySet()) {
             if(key.toString().equals(terminal)){
@@ -151,7 +159,9 @@ public class MulticastServer extends Thread{
             }
         }
     }
-
+    /**
+    * Formats the output from the RMIServer to print the election's candidate lists
+    */
     public String ShowListas(String lista){
         String finalList="";
         if (lista.equals("Nao existem eleicoes ativas.") || lista.equals("Nao existem listas nesta eleicao.") ){
@@ -187,7 +197,10 @@ class MulticastServer2 extends Thread{
             }
         }
     }
-
+    
+    /**
+    * Verifies if the CC owner has already voted
+    */
     public boolean verifyCC(String CC, String CCs){
         for (String nrCC : CCs.split(";")) {
             if(nrCC.equals(CC))return false;
@@ -238,7 +251,9 @@ class gestaoTerminais extends Thread{
             e.printStackTrace();
         }    
     }
-
+    /**
+    * Verifies if every terminal is blocked or not
+    */
     private boolean isEveryTermBlocked(HashMap<String, String> terminais){
         for (String key : terminais.keySet()) {
             if(terminais.get(key).equals("unblocked")){
@@ -247,7 +262,9 @@ class gestaoTerminais extends Thread{
         }  
         return true;
     }
-
+    /**
+    * Unlocks a terminal if possible
+    */
     private String unlockTerminals(HashMap<String, String> terminais){
         for (String key : terminais.keySet()) {
             if(terminais.get(key).equals("blocked")){
