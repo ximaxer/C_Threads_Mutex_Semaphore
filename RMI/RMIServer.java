@@ -401,11 +401,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     public String showResultsPastElection(String electionName)throws RemoteException{
         String results="";
         int totalVotos=0;
+        double perc=0;
         for(Listas lista: data.getElection(electionName).getListas()){
             totalVotos += lista.getVotos();
         }
         for(Listas lista: data.getElection(electionName).getListas()){
-            results += lista.getName()+" : "+ lista.getVotos()+" votos("+((lista.getVotos()/totalVotos)*100)+"%)\n";
+            perc = (double)(((double)lista.getVotos()/(double)totalVotos)*100);
+            results += lista.getName()+" : "+ lista.getVotos()+" votos("+perc+"%)\n";
         }
         return results;
     }
