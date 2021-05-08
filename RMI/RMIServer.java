@@ -276,7 +276,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         }
         return false;
     }
-    /**
+    /** 
     * Checks is the specified has already voted
     */
     public boolean VerifyHasUserAlreadyVoted(User user,Election election) throws InvalidUsername{
