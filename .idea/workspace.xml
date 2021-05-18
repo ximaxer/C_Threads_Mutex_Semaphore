@@ -4,7 +4,57 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d49cf0a-e99b-47ae-b851-4d694bef81a4" name="Default Changelist" comment="" />
+    <list default="true" id="1d49cf0a-e99b-47ae-b851-4d694bef81a4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Acaba$RemindTask.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Acaba.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MulticastClient.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MulticastClient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MulticastServer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MulticastServer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MulticastServer2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MulticastUser.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/Admin.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/Admin.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/AdminConsole.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/AdminConsole.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/CONST$MULTICAST.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/CONST$RMI.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/CONST.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/CONST.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/Data.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/Data.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/Election.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/Election.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/ElectionAlreadyExistsException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/ElectionAlreadyExistsException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/InvalidRequestType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/InvalidRequestType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/InvalidUsername.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/InvalidUsername.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/Listas.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/Listas.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/RMIInterface.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/RMIInterface.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/RMIServer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/RMIServer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/Table.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/Table.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/User.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/UsernameAlreadyExistsException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/UsernameAlreadyExistsException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/WrongPassword.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/WrongPassword.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/console.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RMI/rmiserver.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SD.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SD.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/adminsObjFile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/electionsObjFile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/tablesObjFile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/usersObjFile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gestaoTerminais.class" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -52,6 +102,8 @@
       <updated>1619051697801</updated>
       <workItem from="1619051701660" duration="57000" />
       <workItem from="1620501996302" duration="1731000" />
+      <workItem from="1621372157085" duration="209000" />
+      <workItem from="1621372376817" duration="312000" />
     </task>
     <servers />
   </component>
