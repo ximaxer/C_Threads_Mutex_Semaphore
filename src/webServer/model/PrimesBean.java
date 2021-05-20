@@ -1,38 +1,57 @@
 package webServer.model;
 
-import java.lang.reflect.Array;
-import java.net.MalformedURLException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import RMI.ElectionAlreadyExistsException;
 import RMI.InvalidUsername;
 import RMI.RMIInterface;
 import RMI.UsernameAlreadyExistsException;
+import org.apache.struts2.components.Bean;
 import ws.WebSocketAnnotation;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class PrimesBean {
-	private RMIInterface rmi;
-	private ArrayList<String> activeElections;
+public class PrimesBean extends UnicastRemoteObject implements BeanInterface, Serializable {
+	private static RMIInterface rmi;
+	private static final long serialVersionUID = 1L;
 	private String uname; // username and password supplied by the user
 	private String pass;
 	private String election, electionToVote;
-	private WebSocketAnnotation ws;
+	private static WebSocketAnnotation ws;
 
-	public PrimesBean() {
-		ws = new WebSocketAnnotation();
-		try {
-			rmi = (RMIInterface) LocateRegistry.getRegistry("localhost",7001).lookup("server");
-		}
-		catch(NotBoundException/* | MalformedURLException*/ | RemoteException e) {
-			e.printStackTrace(); // what happens *after* we reach this line?
+	public PrimesBean() throws RemoteException {
+		super();
+		System.out.print("HELLO\n");
+		System.out.println(this);
+		boolean a=false;
+		while(!a) {
+			try {
+				rmi = (RMIInterface) LocateRegistry.getRegistry("localhost", 7001).lookup("server");
+				System.out.print(this.toString());
+				rmi.registaBean(this);
+				a=true;
+			} catch (NotBoundException/* | MalformedURLException*/ | RemoteException e) {
+				e.printStackTrace(); // what happens *after* we reach this line?
+			}
 		}
 	}
 
+	public void subscreve(BeanInterface b) throws RemoteException {
+		rmi.registaBean(b);
+	}
+
+	public void test() throws RemoteException{
+		System.out.println("hello");
+	}
 	public ArrayList<String> getAllUsers() throws RemoteException {
 		return rmi.getAllUsers(); // are you going to throw all exceptions?
 	}
@@ -72,10 +91,34 @@ public class PrimesBean {
 		return "erro";
 	}
 	public String castVote(String username, String electionName, String lista) throws InvalidUsername, RemoteException {
-		String result = rmi.addVote(username, electionName, lista);
-		if(result.equals("Obrigado por votar."))ws.receiveMessage("["+electionName+"] "+username +" voted on" + lista);
-		return result;
+		ws = new WebSocketAnnotation();
+		String result = rmi.addVote(username,electionName,lista);
+		System.out.println(username +" "+ electionName+" "+lista);
+		System.out.println(result);
+		if(result.equals("Obrigado por votar.")){
+			ws.receiveMessage((username+" has voted on "+ electionName));
+			ws.receiveMessage("user "+username+" has logged out.");
+			return "Obrigado por votar.";
+		}
+		return "Ja votou nesta eleicao!";
 	}
+	public String castVoteRMI(String result, String username, String electionName) throws InvalidUsername, RemoteException {
+		System.out.println(username + " votou em " + electionName + " " + result);
+		ws = new WebSocketAnnotation();
+		System.out.println(ws.toString());
+		if(result.equals("Obrigado por votar.")){
+			ws.receiveMessage((username+" has voted on "+ electionName));
+			return "Obrigado por votar.";
+		}
+		return "Ja votou nesta eleicao!";
+	}
+	public void notificationFromRMI(String notif) throws RemoteException{
+		System.out.println(notif);
+		ws = new WebSocketAnnotation();
+		System.out.println(ws.toString());
+		ws.receiveMessage((notif));
+	}
+
 	public String credentialResult() throws Exception {
 		return rmi.evalCredentials(this.uname, this.pass);
 	}
@@ -120,6 +163,7 @@ public class PrimesBean {
 	public String getUname(){return this.uname;}
 	public String getPass(){return this.pass;}
 	public String getElection(){return this.election;}
+	public WebSocketAnnotation getWs(){return this.ws;}
 	public String getElectionToVote(){return this.electionToVote;}
 
 }

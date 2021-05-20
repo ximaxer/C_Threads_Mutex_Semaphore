@@ -1,67 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="stonk" />
+    </artifacts-to-build>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d49cf0a-e99b-47ae-b851-4d694bef81a4" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/stonk.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/javax_websocket_javax_websocket_api_1_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/webServer/model/BeanInterface.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/webServer/model/Teste.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/webServer/model/TesteIF.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Acaba$RemindTask.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Acaba.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MulticastClient.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MulticastClient.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MulticastServer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MulticastServer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MulticastServer2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MulticastUser.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/Admin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/Admin.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/AdminConsole.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/AdminConsole.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/CONST$MULTICAST.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/CONST$RMI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/CONST.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/CONST.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/Data.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/Data.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/Election.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/Election.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/ElectionAlreadyExistsException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/ElectionAlreadyExistsException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/InvalidRequestType.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/InvalidRequestType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/InvalidUsername.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/InvalidUsername.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/Listas.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/Listas.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/RMIInterface.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/RMIInterface.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/RMIServer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/RMIServer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/Table.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/Table.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/UsernameAlreadyExistsException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/UsernameAlreadyExistsException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/WrongPassword.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/WrongPassword.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/console.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RMI/rmiserver.jar" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/SD.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SD.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/adminsObjFile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/electionsObjFile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/tablesObjFile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/usersObjFile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gestaoTerminais.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/stonk/stonk.war" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/stonk/stonk.war" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/SD/files/electionsObjFile" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SD/files/electionsObjFile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/SD/files/usersObjFile" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SD/files/usersObjFile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/SD/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SD/struts.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MulticastServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RMI/RMIInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMI/RMIInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RMI/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMI/RMIServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/files/electionsObjFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/files/electionsObjFile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/files/usersObjFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/files/usersObjFile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webServer/action/AddListToElectionAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/AddListToElectionAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webServer/action/AddTableAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/AddTableAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webServer/action/ChooseElectionToVoteAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/ChooseElectionToVoteAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webServer/action/CreateElectionAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/CreateElectionAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webServer/action/CreateTableAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/CreateTableAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webServer/action/EditElectionAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/EditElectionAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webServer/action/LoginAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/LoginAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webServer/action/RegisterAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/RegisterAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webServer/action/RemoveTableAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/RemoveTableAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webServer/action/SelectElectionAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/SelectElectionAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webServer/action/VoteAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/VoteAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webServer/model/PrimesBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/model/PrimesBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ws/WebSocketAnnotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ws/WebSocketAnnotation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/closeWindow.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/closeWindow.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="LogFilters">
+    <option name="FILTER_ERRORS" value="false" />
+    <option name="FILTER_WARNINGS" value="false" />
+    <option name="FILTER_INFO" value="true" />
+    <option name="FILTER_DEBUG" value="true" />
+    <option name="CUSTOM_FILTER" />
   </component>
   <component name="ProjectId" id="1rVC6arKL77tL49SqhurEE3zVtn" />
   <component name="ProjectViewState">
@@ -69,28 +73,163 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.35834897" />
     <property name="settings.editor.selected.configurable" value="project.propDebugger" />
   </component>
-  <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
+  <component name="RunManager" selected="Tomcat Server.Tomcat 8.5.65">
+    <configuration name="MulticastClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="MulticastClient" />
+      <module name="SD" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MulticastServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="MulticastServer" />
+      <module name="SD" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RMIServer" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="RMI.RMIServer" />
+      <module name="SD" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="RMI.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Teste" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="webServer.model.Teste" />
+      <module name="SD" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="webServer.model.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Tomcat 8.5.65" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.65" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+      <option name="UPDATING_POLICY" value="restart-server" />
+      <deployment>
+        <artifact name="stonk">
+          <settings>
+            <option name="CONTEXT_PATH" value="/stonk" />
+          </settings>
+        </artifact>
+      </deployment>
+      <server-settings>
+        <option name="BASE_DIRECTORY_NAME" value="e8fd552b-5504-4938-8ee2-81b83364e457" />
+      </server-settings>
+      <predefined_log_file enabled="true" id="Tomcat" />
+      <predefined_log_file enabled="true" id="Tomcat Catalina" />
+      <predefined_log_file id="Tomcat Manager" />
+      <predefined_log_file id="Tomcat Host Manager" />
+      <predefined_log_file id="Tomcat Localhost Access" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="51073" />
+      </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Profile">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="stonk" />
+        </option>
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.RMIServer" />
+      <item itemvalue="Application.MulticastServer" />
+      <item itemvalue="Application.MulticastClient" />
+      <item itemvalue="Application.Teste" />
+      <item itemvalue="Tomcat Server.Tomcat 8.5.65" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MulticastClient" />
+        <item itemvalue="Application.MulticastServer" />
+        <item itemvalue="Application.Teste" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -103,12 +242,26 @@
       <workItem from="1619051701660" duration="57000" />
       <workItem from="1620501996302" duration="1731000" />
       <workItem from="1621372157085" duration="209000" />
-      <workItem from="1621372376817" duration="312000" />
+      <workItem from="1621372376817" duration="3632000" />
+      <workItem from="1621419203342" duration="36492000" />
+      <workItem from="1621517624041" duration="1475000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

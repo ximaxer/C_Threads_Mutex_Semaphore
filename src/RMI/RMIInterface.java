@@ -1,5 +1,9 @@
 package RMI;
 
+import webServer.model.BeanInterface;
+import webServer.model.TesteIF;
+import ws.WebSocketAnnotation;
+
 import java.net.UnknownHostException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -43,4 +47,7 @@ public interface RMIInterface extends Remote{
     ArrayList<String> showResultsPastElectionsList() throws RemoteException;
     boolean verifyIfVotedOnElection(String electionName,int CC) throws RemoteException;
     ArrayList<String> electionListsList(String electionName) throws RemoteException;
+    String webVoteCallBack(String username, String electionName, String lista) throws InvalidUsername, RemoteException;
+    void registaBean(BeanInterface bean) throws RemoteException;
+    void subscreveTeste(TesteIF t) throws RemoteException;
 }

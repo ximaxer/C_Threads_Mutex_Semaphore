@@ -55,7 +55,7 @@
             <result name="erro">/userLandingPage.jsp</result>
         </action>
         <action name="vote" method="execute" class="webServer.action.VoteAction">
-            <result name="success">/closeWindow.jsp</result>
+            <result name="success">/index.jsp</result>
             <result name="erro">/votingStation.jsp</result>
         </action>
     </package>

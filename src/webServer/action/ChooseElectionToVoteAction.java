@@ -4,6 +4,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.interceptor.SessionAware;
 import webServer.model.PrimesBean;
 
+import java.rmi.RemoteException;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class ChooseElectionToVoteAction extends ActionSupport implements Session
         return "erro";   // volta para a pagina de login
     }
 
-    public PrimesBean getPrimesBean() {
+    public PrimesBean getPrimesBean() throws RemoteException {
         if(!session.containsKey("primesBean"))  // needs a fix :D
             this.setPrimesBean(new PrimesBean());
         return (PrimesBean) session.get("primesBean");

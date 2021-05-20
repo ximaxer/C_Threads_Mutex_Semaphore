@@ -1,6 +1,10 @@
 package RMI;
 
 
+import webServer.model.BeanInterface;
+import webServer.model.PrimesBean;
+import webServer.model.Teste;
+import webServer.model.TesteIF;
 import ws.WebSocketAnnotation;
 
 import javax.websocket.server.PathParam;
@@ -22,6 +26,8 @@ import java.util.HashMap;
 
 public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     Data data;
+    private static BeanInterface bean;
+    private static TesteIF CBteste;
     private static final long serialVersionUID = 1L;
 
     protected RMIServer() throws RemoteException {
@@ -32,6 +38,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
             data.loadData();
         }catch (Exception e){}
     }
+
     /**
     * Adds a table to the specified department
     * @see #checkTableExists(String)
@@ -43,6 +50,15 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
                 nomes.add(user.getUsername() + " - " + user.getCC());
         }
         return nomes;
+    }
+    public void registaBean(BeanInterface b) throws RemoteException{
+        System.out.println(b.toString() + " working as intended");
+        this.bean = b;
+        bean.test();
+    }
+    public void subscreveTeste(TesteIF t) throws RemoteException{
+        System.out.println(t.toString() + " working as intended");
+        this.CBteste = t;
     }
 
     public void adicionarMesaDeVoto(String departamento,String ip,String port) throws RemoteException{
@@ -67,7 +83,17 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     */
     public String atribuiAdressoMesa(String departamento) throws RemoteException{
         for(Table mesa : data.getTables()){
-            if(mesa.getDepartamento().equals(departamento))return mesa.getIP();
+            if(mesa.getDepartamento().equals(departamento)){
+                boolean a=false;
+                while(!a) {
+                    try {
+                        bean.notificationFromRMI("Mesa " + departamento + " online.");
+                        a = true;
+                    } catch (Exception e) {
+                    }
+                }
+                return mesa.getIP();
+            }
         }
         return "Esta mesa nao existe!\n";
     }
@@ -382,6 +408,21 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     * Adds a vote if possible
     *@see #checkIfCanVote(String,String)
     */
+    public String webVoteCallBack(String username,String electionName,String listaPretendida) throws InvalidUsername, RemoteException {
+        String result = addVote(username,electionName,listaPretendida);
+        boolean a=false;
+        while(!a) {
+            try {
+                bean.castVoteRMI(result, username, electionName);
+                bean.notificationFromRMI("user "+username+" has logged out.");
+                a=true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
     public String addVote(String username,String electionName,String listaPretendida) throws InvalidUsername, RemoteException{
         if(checkIfCanVote(username,electionName)){
             Election election = data.getElection(electionName);
@@ -390,6 +431,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
                     lista.incrementaVoto();
                     election.getListaCandidatosQueVotaram().put(data.getUser(username),Calendar.getInstance());
                     data.updateRecords();
+                    data.getUser(username).setLoggedIn(false);
                     return "Obrigado por votar.";
                 }
             }
@@ -536,17 +578,37 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         validation=checkAdmins(username,password);
         if (validation.equals("Incorrect Password!")){
             return "Incorrect Password!";
-        }else if(validation != ""){
+        }else if(validation != "" && !data.getUser(username).getLoggedIn()){
             data.updateRecords();
+            boolean a=false;
+            while(!a) {
+                try {
+                    bean.notificationFromRMI(username + " has logged in.");
+                    data.getUser(username).setLoggedIn(true);
+                    a = true;
+                } catch (Exception e) {
+                }
+            }
             return "Success!";
-        }else{
-            validation = checkUsers(username,password);
-            if (validation.equals("")){
+        }else {
+            validation = checkUsers(username, password);
+            if (validation.equals("")) {
                 return "User not found!";
-            }else if(validation.equals("Incorrect Password!")){
+            } else if (validation.equals("Incorrect Password!")) {
                 return "Incorrect Password!";
+            } else if (data.getUser(username).getLoggedIn()){
+                return "User already logged in";
             }else{
                 data.updateRecords();
+                boolean a=false;
+                while(!a) {
+                    try {
+                        bean.notificationFromRMI(username + " has logged in.");
+                        data.getUser(username).setLoggedIn(true);
+                        a = true;
+                    } catch (Exception e) {
+                    }
+                }
                 return "Success!";
             }
         }
@@ -689,6 +751,15 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
                 //Naming.rebind("server", rmi);
                 LocateRegistry.createRegistry(7001).rebind("server", rmi);
                 System.out.println("RMI Server ready.");
+                /*boolean a= false;
+                while(!a) {
+                    try {
+                        CBteste.simples();
+                        a=true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }*/
                 alive = true;
             } catch (Exception e) {
                 alive = false;

@@ -140,7 +140,7 @@ public class MulticastServer extends Thread{
                     return "Eleicao inexistente.\n";
                 }
             case "Vote": 
-                return rmi.addVote(messageMap.get("username"),messageMap.get("election"),messageMap.get("voto"))+"\n";
+                return rmi.webVoteCallBack(messageMap.get("username"),messageMap.get("election"),messageMap.get("voto"))+"\n";
 			case "block":
                 lockTerminal(messageMap.get("terminal"));
 				return "type|block;terminal|" + messageMap.get("terminal")+"\n";

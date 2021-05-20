@@ -1,6 +1,12 @@
 package ws;
 
+import org.apache.struts2.components.Bean;
+import webServer.model.BeanInterface;
+import webServer.model.PrimesBean;
+
 import java.io.IOException;
+import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -17,13 +23,15 @@ import javax.websocket.OnError;
 import javax.websocket.Session;
 
 @ServerEndpoint(value = "/ws")
-public class WebSocketAnnotation {
+public class WebSocketAnnotation implements Serializable {
+    private static final long serialVersionUID = 1L;
     private static final AtomicInteger sequence = new AtomicInteger(1);
     private final String username;
     private Session session;
+    private BeanInterface bean;
     private static final Set<WebSocketAnnotation> users = new CopyOnWriteArraySet<>();
 
-    public WebSocketAnnotation() {
+    public WebSocketAnnotation() throws RemoteException {
         username = "User" + sequence.getAndIncrement();
     }
 

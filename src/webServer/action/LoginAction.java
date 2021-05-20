@@ -4,6 +4,7 @@ import org.apache.struts2.interceptor.SessionAware;
 import com.opensymphony.xwork2.ActionSupport;
 import webServer.model.PrimesBean;
 
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,9 +17,9 @@ public class LoginAction extends ActionSupport implements SessionAware{
 	public String execute() throws Exception {
         System.out.printf("username: %s\npassword: %s\n-----------------------\n",this.uname,pass);
         if (uname != null && !uname.equals("")) {
-            if (uname.equals("admin") && pass.equals("admin")) return "admin";
             this.getPrimesBean().setUname(uname);
             this.getPrimesBean().setPass(pass);
+            if (uname.equals("admin") && pass.equals("admin")) return "admin";
             if (this.getPrimesBean().credentialResult().equals("Success!")) {
                 session.put("username", uname);
                 session.put("loggedin", true); // this marks the user as logged in
@@ -28,9 +29,10 @@ public class LoginAction extends ActionSupport implements SessionAware{
         return LOGIN;   // volta para a pagina de login
     }
 
-    public PrimesBean getPrimesBean() {
-        if(!session.containsKey("primesBean"))  // needs a fix :D
+    public PrimesBean getPrimesBean() throws RemoteException {
+        if(!session.containsKey("primesBean")) {  // needs a fix :D
             this.setPrimesBean(new PrimesBean());
+        }
         return (PrimesBean) session.get("primesBean");
     }
 

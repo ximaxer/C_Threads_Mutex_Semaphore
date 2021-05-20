@@ -5,11 +5,9 @@
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
     <!-- devMode equals debug information and reload everything for every request -->
+    <constant name="struts.action.excludePattern" value="/ws"/>
     <constant value="true" name="struts.devMode"/>
     <constant value="simple" name="struts.ui.theme"/>
-    <constant name="struts.action.excludePattern" value="/ws.*?" />
-    <constant name="struts.action.excludePattern" value="^ws://.+$"/>
-    <constant name="struts.action.excludePattern" value="ws://*"/>
     <package name="default" extends="struts-default">
         <default-action-ref name="index"/>
         <action name="index">
@@ -57,7 +55,7 @@
             <result name="erro">/userLandingPage.jsp</result>
         </action>
         <action name="vote" method="execute" class="webServer.action.VoteAction">
-            <result name="success">/closeWindow.jsp</result>
+            <result name="success">/index.jsp</result>
             <result name="erro">/votingStation.jsp</result>
         </action>
     </package>

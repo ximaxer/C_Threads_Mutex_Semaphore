@@ -25,5 +25,6 @@
     <orderEntry type="library" name="SD" level="project" />
     <orderEntry type="library" name="javax.servlet:jstl:1.2" level="project" />
     <orderEntry type="library" name="javax.websocket:javax.websocket-api:1.1" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
