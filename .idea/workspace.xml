@@ -10,39 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d49cf0a-e99b-47ae-b851-4d694bef81a4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/stonk.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/javax_websocket_javax_websocket_api_1_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/webServer/model/BeanInterface.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/webServer/model/Teste.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/webServer/model/TesteIF.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SD.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SD.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/stonk/stonk.war" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/stonk/stonk.war" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/SD/files/electionsObjFile" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SD/files/electionsObjFile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/SD/files/usersObjFile" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SD/files/usersObjFile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/SD/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SD/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MulticastServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RMI/RMIInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMI/RMIInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RMI/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMI/RMIServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/files/electionsObjFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/files/electionsObjFile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/files/usersObjFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/files/usersObjFile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/webServer/action/AddListToElectionAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/AddListToElectionAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/webServer/action/AddTableAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/AddTableAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/webServer/action/ChooseElectionToVoteAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/ChooseElectionToVoteAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/webServer/action/CreateElectionAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/CreateElectionAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/webServer/action/CreateTableAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/CreateTableAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/webServer/action/EditElectionAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/EditElectionAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/webServer/action/LoginAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/LoginAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/webServer/action/RegisterAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/RegisterAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/webServer/action/RemoveTableAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/RemoveTableAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/webServer/action/SelectElectionAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/SelectElectionAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/webServer/action/VoteAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/action/VoteAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/webServer/model/PrimesBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webServer/model/PrimesBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ws/WebSocketAnnotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ws/WebSocketAnnotation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/closeWindow.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/closeWindow.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +60,7 @@
     <property name="project.structure.side.proportion" value="0.35834897" />
     <property name="settings.editor.selected.configurable" value="project.propDebugger" />
   </component>
-  <component name="RunManager" selected="Tomcat Server.Tomcat 8.5.65">
+  <component name="RunManager" selected="Application.RMIServer">
     <configuration name="MulticastClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MulticastClient" />
       <module name="SD" />
@@ -245,6 +217,10 @@
       <workItem from="1621372376817" duration="3632000" />
       <workItem from="1621419203342" duration="36492000" />
       <workItem from="1621517624041" duration="1475000" />
+      <workItem from="1621524024689" duration="40000" />
+      <workItem from="1621532263188" duration="2791000" />
+      <workItem from="1621538463776" duration="3131000" />
+      <workItem from="1621597903442" duration="1285000" />
     </task>
     <servers />
   </component>
