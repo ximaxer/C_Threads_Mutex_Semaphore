@@ -57,8 +57,13 @@ public class PrimesBean extends UnicastRemoteObject implements BeanInterface, Se
 	}
 
 	public String registerNewMan(String nome, String pass, String instituicao, int telefone, String morada, int CC, Calendar valCC) throws UsernameAlreadyExistsException, RemoteException {
-		rmi.RegisterPerson(nome, pass, instituicao, telefone, morada, CC, valCC, "aluno");
-		return "success";
+		try{
+			rmi.RegisterPerson(nome, pass, instituicao, telefone, morada, CC, valCC, "aluno");
+			return "success";
+		}
+		catch(Exception e){
+			return "erro";
+		}
 	}
 
 	public String createNewTable(String departamento, String ip, String port) throws RemoteException {

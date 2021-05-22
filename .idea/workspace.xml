@@ -9,13 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d49cf0a-e99b-47ae-b851-4d694bef81a4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/stonk/stonk.war" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/stonk/stonk.war" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/SD/files/electionsObjFile" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SD/files/electionsObjFile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/SD/files/usersObjFile" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SD/files/usersObjFile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
-    </list>
+    <list default="true" id="1d49cf0a-e99b-47ae-b851-4d694bef81a4" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -60,7 +54,7 @@
     <property name="project.structure.side.proportion" value="0.35834897" />
     <property name="settings.editor.selected.configurable" value="project.propDebugger" />
   </component>
-  <component name="RunManager" selected="Application.RMIServer">
+  <component name="RunManager" selected="Tomcat Server.Tomcat 8.5.65">
     <configuration name="MulticastClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MulticastClient" />
       <module name="SD" />
@@ -221,6 +215,8 @@
       <workItem from="1621532263188" duration="2791000" />
       <workItem from="1621538463776" duration="3131000" />
       <workItem from="1621597903442" duration="1285000" />
+      <workItem from="1621615645186" duration="13629000" />
+      <workItem from="1621691425013" duration="8674000" />
     </task>
     <servers />
   </component>

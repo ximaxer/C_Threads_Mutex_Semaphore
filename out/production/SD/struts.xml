@@ -13,47 +13,81 @@
         <action name="index">
             <result>/index.jsp</result>
         </action>
+        <!-- login action - ação para fazer login -->
+        <!-- se devolver admin, vai para admin.jsp -->
+        <!-- se devolver sucesso, vai para userLandingPage.jsp -->
+        <!-- se devolver login(erro), mantém-se na pagina -->
         <action name="login" method="execute" class="webServer.action.LoginAction">
             <result name="admin">/admin.jsp</result>
             <result name="success">/userLandingPage.jsp</result>
             <result name="login">/index.jsp</result>
         </action>
+        <!-- register action - ação para registar uma pessoa -->
+        <!-- se devolver sucesso, vai para admin.jsp -->
+        <!-- se devolver erro, mantém-se na pagina -->
         <action name="registar" method="execute" class="webServer.action.RegisterAction">
             <result name="success">/admin.jsp</result>
             <result name="erro">/register.jsp</result>
         </action>
+        <!-- createTable action - ação para criar uma mesa -->
+        <!-- se devolver sucesso, vai para admin.jsp -->
+        <!-- se devolver erro, mantém-se na pagina -->
         <action name="createTable" method="execute" class="webServer.action.CreateTableAction">
             <result name="success">/admin.jsp</result>
             <result name="erro">/createTable.jsp</result>
         </action>
+        <!-- addTableToElection action - ação para associar uma mesa a uma eleiçao -->
+        <!-- se devolver sucesso, vai para admin.jsp -->
+        <!-- se devolver erro, mantém-se na pagina -->
         <action name="addTableToElection" method="execute" class="webServer.action.AddTableAction">
             <result name="success">/admin.jsp</result>
             <result name="erro">/addTable.jsp</result>
         </action>
+        <!-- removeTableFromElection action - ação para remover uma mesa de uma eleiçao -->
+        <!-- se devolver sucesso, vai para admin.jsp -->
+        <!-- se devolver erro, mantém-se na pagina -->
         <action name="removeTableFromElection" method="execute" class="webServer.action.RemoveTableAction">
             <result name="success">/admin.jsp</result>
             <result name="erro">/removeTable.jsp</result>
         </action>
+        <!-- createElection action - ação para criar uma nova eleiçao -->
+        <!-- se devolver sucesso, vai para admin.jsp -->
+        <!-- se devolver erro, mantém-se na pagina -->
         <action name="createElection" method="execute" class="webServer.action.CreateElectionAction">
             <result name="success">/admin.jsp</result>
             <result name="erro">/createElection.jsp</result>
         </action>
+        <!-- addListToElection action - ação para adicionar uma nova lista a uma eleiçao existente -->
+        <!-- se devolver sucesso, vai para admin.jsp -->
+        <!-- se devolver erro, mantém-se na pagina -->
         <action name="addListToElection" method="execute" class="webServer.action.AddListToElectionAction">
             <result name="success">/admin.jsp</result>
             <result name="erro">/addList.jsp</result>
         </action>
+        <!-- selectElection action - ação para escolher uma eleiçao (admin side)-->
+        <!-- se devolver sucesso, vai para editElection2.jsp -->
+        <!-- se devolver erro, mantém-se na pagina -->
         <action name="selectElection" method="execute" class="webServer.action.SelectElectionAction">
             <result name="success">/editElection2.jsp</result>
             <result name="erro">/editElection1.jsp</result>
         </action>
+        <!-- editElection action - ação para editar uma eleiçao escolhida-->
+        <!-- se devolver sucesso, vai para admin.jsp -->
+        <!-- se devolver erro, mantém-se na pagina -->
         <action name="editElection" method="execute" class="webServer.action.EditElectionAction">
             <result name="success">/admin.jsp</result>
             <result name="erro">/editElection2.jsp</result>
         </action>
+        <!-- chooseElection action - ação para escolher uma eleiçao (user side)-->
+        <!-- se devolver sucesso, vai para votingStation.jsp -->
+        <!-- se devolver erro, mantém-se na pagina -->
         <action name="chooseElection" method="execute" class="webServer.action.ChooseElectionToVoteAction">
             <result name="success">/votingStation.jsp</result>
             <result name="erro">/userLandingPage.jsp</result>
         </action>
+        <!-- vote action - ação para votar numa eleiçao -->
+        <!-- se devolver sucesso, vai para index.jsp -->
+        <!-- se devolver erro, mantém-se na pagina -->
         <action name="vote" method="execute" class="webServer.action.VoteAction">
             <result name="success">/index.jsp</result>
             <result name="erro">/votingStation.jsp</result>

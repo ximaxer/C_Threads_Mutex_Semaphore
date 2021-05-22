@@ -328,6 +328,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
                 election.setInstituicao(instituicao);
                 election.setDataI(dataI);
                 election.setDataF(dataF);
+                data.updateRecords();
                 return "success";
             }
         }
